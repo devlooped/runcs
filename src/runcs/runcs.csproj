@@ -3,8 +3,38 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
+
+    <AssemblyName>runcs</AssemblyName>
+    <RootNamespace>Devlooped</RootNamespace>
+    <SignAssembly>false</SignAssembly>
+
+    <PackageId>runcs</PackageId>
+    <ToolCommandName>runcs</ToolCommandName>
+    <PackAsTool>true</PackAsTool>
+    <PackageReadmeFile>readme.md</PackageReadmeFile>
+    <PackageTags>dotnet dotnet-tool</PackageTags>
+
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DotNetConfig.Configuration" Version="1.2.0" />
+    <PackageReference Include="Devlooped.CredentialManager" Version="2.6.1" Aliases="Devlooped" />
+    <PackageReference Include="git-credential-manager" Version="2.6.1" IncludeAssets="tools" GeneratePathProperty="true" />
+    <PackageReference Include="Spectre.Console" Version="0.48.0" />
+    <PackageReference Include="ThisAssembly" Version="1.0.8" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(Pkggit-credential-manager)' != ''">
+    <Reference Include="Atlassian.Bitbucket" HintPath="$(Pkggit-credential-manager)\tools\net8.0\any\Atlassian.Bitbucket.dll" />
+    <Reference Include="Microsoft.AzureRepos" HintPath="$(Pkggit-credential-manager)\tools\net8.0\any\Microsoft.AzureRepos.dll" />
+    <Reference Include="GitHub" HintPath="$(Pkggit-credential-manager)\tools\net8.0\any\GitHub.dll" />
+    <Reference Include="GitLab" HintPath="$(Pkggit-credential-manager)\tools\net8.0\any\GitLab.dll" />
+    <Reference Include="gcmcore" HintPath="$(Pkggit-credential-manager)\tools\net8.0\any\gcmcore.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectProperty Include="ToolCommandName"/>
+  </ItemGroup>
 
 </Project>

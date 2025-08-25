@@ -21,12 +21,6 @@ class GitHubAuthHandler(HttpMessageHandler inner) : AuthHandler(inner)
 
         var response = await base.SendAsync(request, cancellationToken);
 
-        if (response.StatusCode == System.Net.HttpStatusCode.NotFound &&
-            request.RequestUri.Host.StartsWith("raw") &&
-            (request.RequestUri.PathAndQuery.Contains("/tree/") || request.Headers.Referrer?.PathAndQuery.Contains("/tree/") == true))
-            // These will always fail, don't try to auth in particular.
-            return response;
-
         if (response.StatusCode == System.Net.HttpStatusCode.Forbidden ||
             response.StatusCode == System.Net.HttpStatusCode.NotFound)
         {

@@ -22,10 +22,10 @@ class GitAuthHandler : DelegatingHandler
         var handler = new HttpClientHandler();
         authHandlers = new Dictionary<string, IAuthHandler>(StringComparer.OrdinalIgnoreCase)
         {
-            { "github.com", new GitHubAuthHandler(handler) },
-            { "raw.githubusercontent.com", new GitHubAuthHandler(handler) },
             { "bitbucket.org", new BitbucketAuthHandler(handler) },
             { "dev.azure.com", new AzureRepoAuthHandler(handler) },
+            { "github.com", new GitHubAuthHandler(handler) },
+            { "gitlab.com", new GitLabAuthHandler(handler) },
         };
     }
 

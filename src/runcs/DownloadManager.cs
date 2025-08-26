@@ -45,5 +45,4 @@ class DownloadManager
             Directory.CreateDirectory(path, UnixFileMode.UserRead | UnixFileMode.UserWrite | UnixFileMode.UserExecute);
         }
     }
-
 }

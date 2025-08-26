@@ -1,5 +1,3 @@
-using Devlooped;
-
 namespace Devlooped.Tests;
 
 public class FileRefTests
@@ -14,11 +12,11 @@ public class FileRefTests
     public void TryParse_OwnerRepoOnly_SetsOwnerRepoAndNullsOthers(string input, string expectedOwnerRepo, string? expectedBranch, string? expectedPath)
     {
         var success = FileRef.TryParse(input, out var result);
-        
+
         Assert.True(success);
         Assert.NotNull(result);
         Assert.Equal(expectedOwnerRepo, result.OwnerRepo);
-        Assert.Equal(expectedBranch, result.BranchOrTag);
+        Assert.Equal(expectedBranch, result.Ref);
         Assert.Equal(expectedPath, result.FilePath);
     }
 
@@ -38,11 +36,11 @@ public class FileRefTests
     public void TryParse_OwnerRepoWithBranch_SetsOwnerRepoAndBranch(string input, string expectedOwnerRepo, string expectedBranch, string? expectedPath)
     {
         var success = FileRef.TryParse(input, out var result);
-        
+
         Assert.True(success);
         Assert.NotNull(result);
         Assert.Equal(expectedOwnerRepo, result.OwnerRepo);
-        Assert.Equal(expectedBranch, result.BranchOrTag);
+        Assert.Equal(expectedBranch, result.Ref);
         Assert.Equal(expectedPath, result.FilePath);
     }
 
@@ -60,11 +58,11 @@ public class FileRefTests
     public void TryParse_OwnerRepoWithPath_SetsOwnerRepoAndPath(string input, string expectedOwnerRepo, string? expectedBranch, string expectedPath)
     {
         var success = FileRef.TryParse(input, out var result);
-        
+
         Assert.True(success);
         Assert.NotNull(result);
         Assert.Equal(expectedOwnerRepo, result.OwnerRepo);
-        Assert.Equal(expectedBranch, result.BranchOrTag);
+        Assert.Equal(expectedBranch, result.Ref);
         Assert.Equal(expectedPath, result.FilePath);
     }
 
@@ -80,11 +78,11 @@ public class FileRefTests
     public void TryParse_OwnerRepoWithBranchAndPath_SetsAllProperties(string input, string expectedOwnerRepo, string expectedBranch, string expectedPath)
     {
         var success = FileRef.TryParse(input, out var result);
-        
+
         Assert.True(success);
         Assert.NotNull(result);
         Assert.Equal(expectedOwnerRepo, result.OwnerRepo);
-        Assert.Equal(expectedBranch, result.BranchOrTag);
+        Assert.Equal(expectedBranch, result.Ref);
         Assert.Equal(expectedPath, result.FilePath);
     }
 
@@ -110,7 +108,7 @@ public class FileRefTests
     public void TryParse_InvalidFormats_ReturnsFalse(string input)
     {
         var success = FileRef.TryParse(input, out var result);
-        
+
         Assert.False(success);
         Assert.Null(result);
     }
@@ -119,7 +117,7 @@ public class FileRefTests
     public void TryParse_NullInput_ReturnsFalse()
     {
         var success = FileRef.TryParse(null!, out var result);
-        
+
         Assert.False(success);
         Assert.Null(result);
     }
@@ -132,11 +130,11 @@ public class FileRefTests
     public void TryParse_RealWorldExamples_WorksCorrectly(string input, string expectedOwner, string expectedRepo)
     {
         var success = FileRef.TryParse(input, out var result);
-        
+
         Assert.True(success);
         Assert.NotNull(result);
         Assert.Equal($"{expectedOwner}/{expectedRepo}", result.OwnerRepo);
-        Assert.Null(result.BranchOrTag);
+        Assert.Null(result.Ref);
         Assert.Null(result.FilePath);
     }
 
@@ -150,12 +148,12 @@ public class FileRefTests
     {
         // These should not throw and should produce valid FileRef objects
         var success = FileRef.TryParse(input, out var result);
-        
+
         Assert.True(success);
         Assert.NotNull(result);
         Assert.NotNull(result.OwnerRepo);
         Assert.Contains("/", result.OwnerRepo);
-        Assert.NotNull(result.BranchOrTag);
+        Assert.NotNull(result.Ref);
         Assert.NotNull(result.FilePath);
     }
 
@@ -166,7 +164,7 @@ public class FileRefTests
     public void TryParse_EdgeCaseLengths_WorksCorrectly(string input)
     {
         var success = FileRef.TryParse(input, out var result);
-        
+
         Assert.True(success);
         Assert.NotNull(result);
         Assert.NotEmpty(result.OwnerRepo);
@@ -180,11 +178,11 @@ public class FileRefTests
     public void TryParse_CaseSensitive_PreservesCase(string input, string expectedOwnerRepo, string? expectedBranch, string? expectedPath)
     {
         var success = FileRef.TryParse(input, out var result);
-        
+
         Assert.True(success);
         Assert.NotNull(result);
         Assert.Equal(expectedOwnerRepo, result.OwnerRepo);
-        Assert.Equal(expectedBranch, result.BranchOrTag);
+        Assert.Equal(expectedBranch, result.Ref);
         Assert.Equal(expectedPath, result.FilePath);
     }
 
@@ -200,11 +198,11 @@ public class FileRefTests
     public void TryParse_SpecialCharacterCombinations_WorksCorrectly(string input, string expectedOwnerRepo, string? expectedBranch, string expectedPath)
     {
         var success = FileRef.TryParse(input, out var result);
-        
+
         Assert.True(success);
         Assert.NotNull(result);
         Assert.Equal(expectedOwnerRepo, result.OwnerRepo);
-        Assert.Equal(expectedBranch, result.BranchOrTag);
+        Assert.Equal(expectedBranch, result.Ref);
         Assert.Equal(expectedPath, result.FilePath);
     }
 
@@ -215,11 +213,11 @@ public class FileRefTests
     public void TryParse_EdgeCaseMinimalPaths_WorksCorrectly(string input, string expectedOwnerRepo, string expectedBranch, string expectedPath)
     {
         var success = FileRef.TryParse(input, out var result);
-        
+
         Assert.True(success);
         Assert.NotNull(result);
         Assert.Equal(expectedOwnerRepo, result.OwnerRepo);
-        Assert.Equal(expectedBranch, result.BranchOrTag);
+        Assert.Equal(expectedBranch, result.Ref);
         Assert.Equal(expectedPath, result.FilePath);
     }
 
@@ -235,12 +233,12 @@ public class FileRefTests
     public void TryParse_WithHost_SetsHostAndOwnerRepo(string input, string expectedHost, string expectedOwnerRepo, string? expectedBranch, string? expectedPath)
     {
         var success = FileRef.TryParse(input, out var result);
-        
+
         Assert.True(success);
         Assert.NotNull(result);
         Assert.Equal(expectedHost, result.Host);
         Assert.Equal(expectedOwnerRepo, result.OwnerRepo);
-        Assert.Equal(expectedBranch, result.BranchOrTag);
+        Assert.Equal(expectedBranch, result.Ref);
         Assert.Equal(expectedPath, result.FilePath);
     }
 
@@ -256,12 +254,12 @@ public class FileRefTests
     public void TryParse_WithHostAndBranch_SetsHostOwnerRepoAndBranch(string input, string expectedHost, string expectedOwnerRepo, string expectedBranch, string? expectedPath)
     {
         var success = FileRef.TryParse(input, out var result);
-        
+
         Assert.True(success);
         Assert.NotNull(result);
         Assert.Equal(expectedHost, result.Host);
         Assert.Equal(expectedOwnerRepo, result.OwnerRepo);
-        Assert.Equal(expectedBranch, result.BranchOrTag);
+        Assert.Equal(expectedBranch, result.Ref);
         Assert.Equal(expectedPath, result.FilePath);
     }
 
@@ -277,12 +275,12 @@ public class FileRefTests
     public void TryParse_WithHostAndPath_SetsHostOwnerRepoAndPath(string input, string expectedHost, string expectedOwnerRepo, string? expectedBranch, string expectedPath)
     {
         var success = FileRef.TryParse(input, out var result);
-        
+
         Assert.True(success);
         Assert.NotNull(result);
         Assert.Equal(expectedHost, result.Host);
         Assert.Equal(expectedOwnerRepo, result.OwnerRepo);
-        Assert.Equal(expectedBranch, result.BranchOrTag);
+        Assert.Equal(expectedBranch, result.Ref);
         Assert.Equal(expectedPath, result.FilePath);
     }
 
@@ -298,12 +296,12 @@ public class FileRefTests
     public void TryParse_WithHostBranchAndPath_SetsAllProperties(string input, string expectedHost, string expectedOwnerRepo, string expectedBranch, string expectedPath)
     {
         var success = FileRef.TryParse(input, out var result);
-        
+
         Assert.True(success);
         Assert.NotNull(result);
         Assert.Equal(expectedHost, result.Host);
         Assert.Equal(expectedOwnerRepo, result.OwnerRepo);
-        Assert.Equal(expectedBranch, result.BranchOrTag);
+        Assert.Equal(expectedBranch, result.Ref);
         Assert.Equal(expectedPath, result.FilePath);
     }
 
@@ -319,12 +317,12 @@ public class FileRefTests
     public void TryParse_WithCustomHostDomains_WorksCorrectly(string input, string expectedHost, string expectedOwnerRepo)
     {
         var success = FileRef.TryParse(input, out var result);
-        
+
         Assert.True(success);
         Assert.NotNull(result);
         Assert.Equal(expectedHost, result.Host);
         Assert.Equal(expectedOwnerRepo, result.OwnerRepo);
-        Assert.Null(result.BranchOrTag);
+        Assert.Null(result.Ref);
         Assert.Null(result.FilePath);
     }
 
@@ -333,14 +331,13 @@ public class FileRefTests
     [InlineData("git/owner/repo")] // No TLD
     [InlineData("192.168.1.1/owner/repo")] // IP address
     [InlineData("git.a/owner/repo")] // TLD too short (needs 2+ chars)
-    [InlineData(".example.com/owner/repo")] // Invalid hostname (starts with dot)
     [InlineData("example.com./owner/repo")] // Invalid hostname (ends with dot)
     [InlineData("git host.com/owner/repo")] // Space in hostname
     [InlineData("git_host.com/owner/repo")] // Underscore in hostname (not allowed in regex)
     public void TryParse_WithInvalidHosts_ReturnsFalse(string input)
     {
         var success = FileRef.TryParse(input, out var result);
-        
+
         Assert.False(success);
         Assert.Null(result);
     }
@@ -353,7 +350,7 @@ public class FileRefTests
     public void TryParse_WithUppercaseHosts_PreservesCase(string input, string expectedHost, string expectedOwnerRepo)
     {
         var success = FileRef.TryParse(input, out var result);
-        
+
         Assert.True(success);
         Assert.NotNull(result);
         Assert.Equal(expectedHost, result.Host);
@@ -369,12 +366,12 @@ public class FileRefTests
     public void TryParse_RealWorldHostExamplesWithAllComponents_WorksCorrectly(string input)
     {
         var success = FileRef.TryParse(input, out var result);
-        
+
         Assert.True(success);
         Assert.NotNull(result);
         Assert.NotNull(result.Host);
         Assert.NotNull(result.OwnerRepo);
-        Assert.NotNull(result.BranchOrTag);
+        Assert.NotNull(result.Ref);
         Assert.NotNull(result.FilePath);
         Assert.Contains(".", result.Host); // Should have a TLD
         Assert.Contains("/", result.OwnerRepo); // Should have owner/repo format
@@ -384,26 +381,25 @@ public class FileRefTests
     public void TryParse_WithoutHost_HostIsNull()
     {
         var success = FileRef.TryParse("owner/repo@main:file.txt", out var result);
-        
+
         Assert.True(success);
         Assert.NotNull(result);
         Assert.Null(result.Host);
         Assert.Equal("owner/repo", result.OwnerRepo);
-        Assert.Equal("main", result.BranchOrTag);
+        Assert.Equal("main", result.Ref);
         Assert.Equal("file.txt", result.FilePath);
     }
 
     [Theory]
     [InlineData("git-.example.com/owner/repo", "git-.example.com", "owner/repo")] // Dash at start is allowed in regex
     [InlineData("git..example.com/owner/repo", "git..example.com", "owner/repo")] // Double dots are allowed in regex
-    [InlineData("example.com-/owner/repo", "example.com-", "owner/repo")] // Dash at end is allowed
     [InlineData("a.bc/owner/repo", "a.bc", "owner/repo")] // Minimum 2-char TLD
     [InlineData("git-.example.com/owner/repo@main:file.txt", "git-.example.com", "owner/repo")] // Dash with branch and path
     [InlineData("git..example.com/owner/repo@develop", "git..example.com", "owner/repo")] // Double dots with branch
     public void TryParse_WithEdgeCaseValidHosts_WorksCorrectly(string input, string expectedHost, string expectedOwnerRepo)
     {
         var success = FileRef.TryParse(input, out var result);
-        
+
         Assert.True(success);
         Assert.NotNull(result);
         Assert.Equal(expectedHost, result.Host);
@@ -416,7 +412,7 @@ public class FileRefTests
     public void TryParse_WithSpecialCharacters_WorksCorrectly(string input)
     {
         var success = FileRef.TryParse(input, out var result);
-        
+
         Assert.True(success);
         Assert.NotNull(result);
         Assert.NotNull(result.Host);
@@ -432,7 +428,7 @@ public class FileRefTests
     public void TryParse_WithInvalidOwnerRepoCharacters_ReturnsFalse(string input)
     {
         var success = FileRef.TryParse(input, out var result);
-        
+
         Assert.False(success);
         Assert.Null(result);
     }

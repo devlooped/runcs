@@ -1,7 +1,7 @@
 ﻿using Devlooped;
 using Spectre.Console;
 
-if (args.Length == 0 || !FileRef.TryParse(args[0], out var fileRef))
+if (args.Length == 0 || !FileRef.TryParse(args[0], out var location))
 {
     AnsiConsole.MarkupLine($"Usage: [grey][[dnx]][/] [lime]{ThisAssembly.Project.ToolCommandName}[/] [italic]FILE_REF[/] [grey][[args]][/]");
     AnsiConsole.MarkupLine("""
@@ -19,4 +19,5 @@ if (args.Length == 0 || !FileRef.TryParse(args[0], out var fileRef))
     return;
 }
 
-AnsiConsole.WriteLine(fileRef.ToString() ?? "");
+
+AnsiConsole.WriteLine(location.ToString() ?? "");

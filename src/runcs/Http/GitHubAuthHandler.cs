@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
-using System.Text;
+using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 using GitCredentialManager;
@@ -12,6 +12,9 @@ namespace Devlooped.Http;
 
 class GitHubAuthHandler(HttpMessageHandler inner) : AuthHandler(inner)
 {
+    /// <summary>Key for storing HttpCompletionOption in request options.</summary>
+    static readonly HttpRequestOptionsKey<HttpCompletionOption> CompletionOptionKey = new(nameof(HttpCompletionOption));
+
     ICredential? credential;
 
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
@@ -28,19 +31,15 @@ class GitHubAuthHandler(HttpMessageHandler inner) : AuthHandler(inner)
             if (creds == null)
                 return response;
 
-            var builder = new UriBuilder(request.RequestUri)
-            {
-                UserName = creds.Password,
-                Password = "x-auth-basic"
-            };
-
-            // retry the request
-            var retry = new HttpRequestMessage(HttpMethod.Get, builder.Uri);
-            retry.Headers.Add("Authorization", "Basic " + Convert.ToBase64String(Encoding.ASCII.GetBytes(creds.Password)));
+            var retry = new HttpRequestMessage(HttpMethod.Get, request.RequestUri);
+            retry.Headers.Authorization = new AuthenticationHeaderValue("Bearer", creds.Password);
             foreach (var etag in request.Headers.IfNoneMatch)
             {
                 retry.Headers.IfNoneMatch.Add(etag);
             }
+
+            if (request.Options.TryGetValue(CompletionOptionKey, out var option))
+                request.Options.Set(CompletionOptionKey, option);
 
             return await base.SendAsync(retry, cancellationToken);
         }

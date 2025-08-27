@@ -120,3 +120,13 @@
 	sha = 032439dbf180fca0539a5bd3a019f18ab3484b76
 	etag = da7c0104131bd474b52fc9bc9f9bda6470e24ae38d4fb9f5c4f719bc01370ab5
 	weak
+[file "src/runcs/NoGitWrappers.cs"]
+	url = https://github.com/devlooped/CredentialManager/blob/dev/tests/src/CredentialManager/NoGitWrappers.cs
+	sha = 78c647b20acddc1f172df20d479ce3d0548d05fd
+	etag = 2e2cd6992920ff319bdefd5735926cd5bd4ffef39b4214e3786b96946382985b
+	weak
+[file "src/Tests/Attributes.cs"]
+	url = https://github.com/devlooped/catbag/blob/main/Xunit/Attributes.cs
+	sha = 40914971d4d6b42d6f8a90923b131136f7e609a5
+	etag = c77e7b435ce1df06fb60a3b0e15a0833d8e45d4d19f366c6184140ebb4814b1a
+	weak

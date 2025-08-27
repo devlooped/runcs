@@ -44,7 +44,7 @@ class AzureRepoAuthHandler(HttpMessageHandler inner) : AuthHandler(inner)
             ["path"] = uri.GetComponents(UriComponents.Path, UriFormat.Unescaped),
         });
 
-        var provider = new AzureReposHostProvider(new CommandContext());
+        var provider = new AzureReposHostProvider(CommandContext.Create());
         credential = await provider.GetCredentialAsync(input);
 
         return credential;

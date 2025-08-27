@@ -46,7 +46,7 @@ class BitbucketAuthHandler(HttpMessageHandler inner) : AuthHandler(inner)
             ["path"] = uri.GetComponents(UriComponents.Path, UriFormat.Unescaped),
         });
 
-        var provider = new BitbucketHostProvider(new CommandContext());
+        var provider = new BitbucketHostProvider(CommandContext.Create());
 
         credential = await provider.GetCredentialAsync(input);
         return credential;

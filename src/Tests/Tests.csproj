@@ -1,10 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <AssemblyName>Devlooped.Tests</AssemblyName>
     <RootNamespace>Devlooped.Tests</RootNamespace>
+    <LangVersion>Preview</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -12,6 +13,19 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
     <PackageReference Include="xunit" Version="2.5.3" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.5.3" />
+    <PackageReference Include="git-credential-manager" Version="2.6.1" IncludeAssets="tools" GeneratePathProperty="true" />
+    <PackageReference Include="Avalonia" Version="11.1.3" />
+    <PackageReference Include="Avalonia.Desktop" Version="11.1.3" />
+    <PackageReference Include="Avalonia.Skia" Version="11.1.3" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.1.3" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(Pkggit-credential-manager)' != ''">
+    <Reference Include="Atlassian.Bitbucket" HintPath="$(Pkggit-credential-manager)\tools\net8.0\any\Atlassian.Bitbucket.dll" />
+    <Reference Include="Microsoft.AzureRepos" HintPath="$(Pkggit-credential-manager)\tools\net8.0\any\Microsoft.AzureRepos.dll" />
+    <Reference Include="GitHub" HintPath="$(Pkggit-credential-manager)\tools\net8.0\any\GitHub.dll" />
+    <Reference Include="GitLab" HintPath="$(Pkggit-credential-manager)\tools\net8.0\any\GitLab.dll" />
+    <Reference Include="gcmcore" HintPath="$(Pkggit-credential-manager)\tools\net8.0\any\gcmcore.dll" />
   </ItemGroup>
 
   <ItemGroup>

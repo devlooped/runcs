@@ -12,9 +12,6 @@ namespace Devlooped.Http;
 
 class GitHubAuthHandler(HttpMessageHandler inner) : AuthHandler(inner)
 {
-    /// <summary>Key for storing HttpCompletionOption in request options.</summary>
-    static readonly HttpRequestOptionsKey<HttpCompletionOption> CompletionOptionKey = new(nameof(HttpCompletionOption));
-
     ICredential? credential;
 
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
@@ -38,9 +35,6 @@ class GitHubAuthHandler(HttpMessageHandler inner) : AuthHandler(inner)
                 retry.Headers.IfNoneMatch.Add(etag);
             }
 
-            if (request.Options.TryGetValue(CompletionOptionKey, out var option))
-                request.Options.Set(CompletionOptionKey, option);
-
             return await base.SendAsync(retry, cancellationToken);
         }
 
@@ -52,11 +46,14 @@ class GitHubAuthHandler(HttpMessageHandler inner) : AuthHandler(inner)
         if (credential != null)
             return credential;
 
+        // We can use the namespace-less version since we don't need any specific permissions besides 
+        // the built-in GCM GH auth.
+        var store = Devlooped::GitCredentialManager.CredentialManager.Create();
+
         if (uri != null &&
             uri.PathAndQuery.Split('/', StringSplitOptions.RemoveEmptyEntries) is { Length: >= 2 } parts)
         {
             // Try using GCM via API first to retrieve creds
-            var store = Devlooped::GitCredentialManager.CredentialManager.Create();
             if (GetCredential(store, $"https://github.com/{parts[0]}/{parts[1]}") is { } repo)
                 return repo;
             else if (GetCredential(store, $"https://github.com/{parts[0]}") is { } owner)
@@ -71,11 +68,12 @@ class GitHubAuthHandler(HttpMessageHandler inner) : AuthHandler(inner)
             ["host"] = "github.com",
         });
 
-        var provider = new GitHubHostProvider(new CommandContext());
+        var provider = new GitHubHostProvider(CommandContext.Create(store));
 
         try
         {
             credential = await provider.GetCredentialAsync(input);
+            store.AddOrUpdate("https://github.com", credential.Account, credential.Password);
             return credential;
         }
         catch (Exception)

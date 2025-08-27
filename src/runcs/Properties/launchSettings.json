@@ -1,8 +1,12 @@
 {
   "profiles": {
-    "runcs": {
+    "github": {
       "commandName": "Project",
-      "commandLineArgs": "https://gitlab.com/kzu/sandbox"
+      "commandLineArgs": "kzu/runcs@main:program.cs"
+    },
+    "gitlab": {
+      "commandName": "Project",
+      "commandLineArgs": "gitlab.com/kzu/runcs@main:program.cs"
     }
   }
 }

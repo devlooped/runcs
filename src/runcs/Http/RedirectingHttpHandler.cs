@@ -79,6 +79,8 @@ public sealed class RedirectingHttpHandler(HttpMessageHandler innerHandler) : De
             // Copy headers (preserve conditional ones like If-None-Match)
             CopyHeaders(currentRequest, next);
 
+            next.Headers.TryAddWithoutValidation("X-Original-URI", originalUri.AbsoluteUri);
+
             // We're not going to read this 3xx body; free the socket.
             response.Dispose();
 

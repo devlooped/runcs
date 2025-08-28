@@ -1,8 +1,4 @@
-﻿using System;
-using System.Net;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Net;
 
 namespace Devlooped.Http;
 
@@ -18,7 +14,7 @@ public sealed class RedirectingHttpHandler(HttpMessageHandler innerHandler) : De
 
         var currentRequest = request;
         var originalUri = request.RequestUri ?? throw new InvalidOperationException("RequestUri is required.");
-        var originalHost = NormalizeHost(originalUri.Host);
+        var originalHost = string.Join('.', NormalizeHost(originalUri.Host).Split('.')[^2..]);
         var redirectCount = 0;
 
         while (true)

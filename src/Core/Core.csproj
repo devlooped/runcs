@@ -1,22 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
     <TargetFramework>net10.0</TargetFramework>
-    <LangVersion>Preview</LangVersion>
-
-    <AssemblyName>runcs</AssemblyName>
+    <AssemblyName>Devlooped</AssemblyName>
     <RootNamespace>Devlooped</RootNamespace>
-    <SignAssembly>false</SignAssembly>
-
-    <PackageId>runcs</PackageId>
-    <ToolCommandName>runcs</ToolCommandName>
-    <PackAsTool>true</PackAsTool>
-    <PackageReadmeFile>readme.md</PackageReadmeFile>
-    <PackageTags>dotnet dotnet-tool</PackageTags>
-
-    <GenerateDocumentationFile>false</GenerateDocumentationFile>
-    <RestoreSources>https://api.nuget.org/v3/index.json;https://pkg.kzu.app/index.json;C:\Code\CredentialManager\bin</RestoreSources>
   </PropertyGroup>
 
   <ItemGroup>
@@ -24,13 +11,8 @@
     <PackageReference Include="DotNetConfig.Configuration" Version="1.2.0" />
     <PackageReference Include="Devlooped.CredentialManager" Version="42.42.517-main" Aliases="Devlooped" />
     <PackageReference Include="git-credential-manager" Version="2.6.1" IncludeAssets="tools" GeneratePathProperty="true" />
+    <PackageReference Include="ThisAssembly.Project" Version="2.0.14" PrivateAssets="all" />
     <PackageReference Include="LibGit2Sharp" Version="0.31.0" />
-    <PackageReference Include="Spectre.Console" Version="0.48.0" />
-    <PackageReference Include="ThisAssembly" Version="1.0.8" />
-    <PackageReference Include="Avalonia" Version="11.1.3" />
-    <PackageReference Include="Avalonia.Desktop" Version="11.1.3" />
-    <PackageReference Include="Avalonia.Skia" Version="11.1.3" />
-    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.1.3" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(Pkggit-credential-manager)' != ''">
@@ -39,14 +21,6 @@
     <Reference Include="GitHub" HintPath="$(Pkggit-credential-manager)\tools\net8.0\any\GitHub.dll" />
     <Reference Include="GitLab" HintPath="$(Pkggit-credential-manager)\tools\net8.0\any\GitLab.dll" />
     <Reference Include="gcmcore" HintPath="$(Pkggit-credential-manager)\tools\net8.0\any\gcmcore.dll" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectProperty Include="ToolCommandName" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Core\Core.csproj" />
   </ItemGroup>
 
 </Project>

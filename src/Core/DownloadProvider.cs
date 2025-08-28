@@ -1,14 +1,8 @@
 ﻿extern alias Devlooped;
-
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Net;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
 using Atlassian.Bitbucket;
+using Core;
 using Devlooped.Http;
 using GitCredentialManager;
 using LibGit2Sharp;
@@ -27,7 +21,7 @@ public abstract class DownloadProvider
     public abstract Task<HttpResponseMessage> GetAsync(RemoteRef location);
 }
 
-public class GitHubDownloadProvider : DownloadProvider
+public class GitHubDownloadProvider(bool gist = false) : DownloadProvider
 {
     static readonly HttpClient http = new(new GitHubAuthHandler(
         new RedirectingHttpHandler(
@@ -49,40 +43,14 @@ public class GitHubDownloadProvider : DownloadProvider
                 HttpCompletionOption.ResponseHeadersRead);
         }
 
-        var request = new HttpRequestMessage(HttpMethod.Get, GetBranchUri(location)).WithTag(location.ETag);
-        var response = await http.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
-        // Cascading attempt for branch, tag, sha
-        if (response.StatusCode == HttpStatusCode.NotFound && !string.IsNullOrEmpty(location.Ref))
-        {
-            response = await http.SendAsync(response.Retry(GetTagUri(location)), HttpCompletionOption.ResponseHeadersRead);
-            if (response.StatusCode == HttpStatusCode.NotFound)
-            {
-                response = await http.SendAsync(response.Retry(GetShaUri(location)), HttpCompletionOption.ResponseHeadersRead);
-            }
-        }
+        var subdomain = gist ? "gist." : "";
+        var request = new HttpRequestMessage(HttpMethod.Get,
+            // Direct archive link works for branch, tag, sha
+            new Uri($"https://{subdomain}github.com/{location.Owner}/{location.Repo}/archive/{(location.Ref ?? "main")}.zip"))
+            .WithTag(location.ETag);
 
-        return response;
+        return await http.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
     }
-
-    static Uri GetBranchUri(RemoteRef location)
-    {
-        var url = $"https://github.com/{location.Owner}/{location.Repo}/archive";
-
-        if (!string.IsNullOrEmpty(location.Ref))
-            url += "/refs/heads/" + location.Ref;
-        else
-            url += "/refs/heads/main"; // TODO: get default branch for repo
-
-        url += ".zip";
-
-        return new Uri(url);
-    }
-
-    static Uri GetTagUri(RemoteRef location)
-        => new($"https://github.com/{location.Owner}/{location.Repo}/archive/refs/tags/{location.Ref}.zip");
-
-    static Uri GetShaUri(RemoteRef location)
-        => new($"https://github.com/{location.Owner}/{location.Repo}/archive/{location.Ref}.zip");
 }
 
 public class GitLabDownloadProvider : DownloadProvider

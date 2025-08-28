@@ -1,11 +1,14 @@
-﻿using System;
-using System.IO;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 
 namespace Devlooped;
 
-class DownloadManager
+public static class DownloadManager
 {
+    extension(RemoteRef location)
+    {
+        public string TempPath => Path.Join(GetTempRoot(), location.Owner, location.Repo, location.Ref ?? "main");
+    }
+
     /// <summary>
     /// Obtains the temporary directory root, e.g., <c>/tmp/dotnet/runcs/</c>.
     /// </summary>

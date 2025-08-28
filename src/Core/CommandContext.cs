@@ -13,19 +13,20 @@ namespace GitCredentialManager;
 /// A wrapper for <see cref="ICommandContext"/> that overrides the namespace for credentials and also 
 /// allows git-less usage except for the git cache store.
 /// </summary>
-class CommandContextWrapper : ICommandContext
+partial class CommandContextAdapter : ICommandContext
 {
     readonly CommandContext context;
-    readonly ICredentialStore? store;
     readonly ISettings settings;
     readonly IHttpClientFactory clientFactory;
+    ICredentialStore store;
 
-    public CommandContextWrapper(CommandContext context, string? @namespace = default, ICredentialStore? store = default)
+    public CommandContextAdapter(CommandContext context, string? @namespace = default)
     {
         this.context = context;
-        this.store = store;
 
-        settings = new SettingsWrapper(
+        store = new CredentialStore(this);
+
+        settings = new SettingsAdapter(
             context.Settings is WindowsSettings ?
             new NoGitWindowsSettings(context.Environment, context.Git, context.Trace) :
             new NoGitSettings(context.Environment, context.Git), @namespace);
@@ -34,10 +35,13 @@ class CommandContextWrapper : ICommandContext
             context.FileSystem, context.Trace, context.Trace2, settings, context.Streams);
     }
 
-
     public ISettings Settings => settings;
 
-    public ICredentialStore CredentialStore => store ?? ((ICommandContext)context).CredentialStore;
+    public ICredentialStore CredentialStore
+    {
+        get => store;
+        set => store = value;
+    }
 
     public IHttpClientFactory HttpClientFactory => clientFactory;
 
@@ -138,7 +142,7 @@ class CommandContextWrapper : ICommandContext
 
             public bool TryGet(GitConfigurationLevel level, GitConfigurationType type, string name, out string value)
             {
-                value = GetAll(level, type, name).FirstOrDefault();
+                value = GetAll(level, type, name).FirstOrDefault()!;
                 return value is not null;
             }
 
@@ -152,11 +156,14 @@ class CommandContextWrapper : ICommandContext
         }
     }
 
+    /// <summary>Adapts <see cref="Settings"/> to use <see cref="NoGit"/>.</summary>
     class NoGitSettings(IEnvironment environment, IGit git) : Settings(environment, new NoGit(git)) { }
 
+    /// <summary>Adapts <see cref="WindowsSettings"/> to use <see cref="NoGit"/>.</summary>
     class NoGitWindowsSettings(IEnvironment environment, IGit git, ITrace trace) : WindowsSettings(environment, new NoGit(git), trace) { }
 
-    class SettingsWrapper(ISettings settings, string? @namespace) : ISettings
+    /// <summary>Allows overriding the credential namespace.</summary>
+    class SettingsAdapter(ISettings settings, string? @namespace) : ISettings
     {
         public string CredentialNamespace => @namespace ?? settings.CredentialNamespace;
 

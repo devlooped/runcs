@@ -1,9 +1,9 @@
 ﻿extern alias Devlooped;
 using GitCredentialManager;
 
-namespace Devlooped.Http;
+namespace Core;
 
-static class CredentialsExtensions
+public static class CredentialsExtensions
 {
     public static ICredential? GetCredential(this Devlooped::GitCredentialManager.ICredentialStore store, string url)
     {

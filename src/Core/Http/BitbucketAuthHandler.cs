@@ -1,17 +1,13 @@
 ﻿extern alias Devlooped;
-using System;
-using System.Collections.Generic;
 using System.Net;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
 using Atlassian.Bitbucket;
+using Core;
 using GitCredentialManager;
 using GitCredentialManager.Authentication.OAuth;
 
 namespace Devlooped.Http;
 
-class BitbucketAuthHandler(HttpMessageHandler inner) : AuthHandler(inner)
+public class BitbucketAuthHandler(HttpMessageHandler inner) : DelegatingHandler(inner)
 {
     ICredential? credential;
 
@@ -53,7 +49,7 @@ class BitbucketAuthHandler(HttpMessageHandler inner) : AuthHandler(inner)
 
         // We can use the namespace-less version since we don't need any specific permissions besides 
         // the built-in GCM GH auth.
-        var store = Devlooped::GitCredentialManager.CredentialManager.Create(ThisAssembly.Project.ToolCommandName);
+        var store = Devlooped::GitCredentialManager.CredentialManager.Create(ThisAssembly.Project.ProjectName);
         if (store.GetCredential("https://bitbucket.org") is { } global)
             return global;
 
@@ -63,7 +59,7 @@ class BitbucketAuthHandler(HttpMessageHandler inner) : AuthHandler(inner)
             ["host"] = "bitbucket.org",
         });
 
-        var context = CommandContext.Create(store, ThisAssembly.Project.ToolCommandName);
+        var context = CommandContext.Create(store, ThisAssembly.Project.ProjectName);
         var provider = new BitbucketHostProvider(context,
             new ScopesBitbucketAuth(new BitbucketAuthentication(context)),
             new BitbucketRestApiRegistry(context));

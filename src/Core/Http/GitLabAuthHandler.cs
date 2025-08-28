@@ -1,18 +1,13 @@
 ﻿extern alias Devlooped;
-using System;
-using System.Collections.Generic;
 using System.Net;
-using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Threading;
-using System.Threading.Tasks;
 using GitCredentialManager;
 using GitCredentialManager.Authentication.OAuth;
 using GitLab;
 
 namespace Devlooped.Http;
 
-class GitLabAuthHandler(HttpMessageHandler inner) : AuthHandler(inner)
+public class GitLabAuthHandler(HttpMessageHandler inner) : DelegatingHandler(inner)
 {
     static readonly Lazy<HttpClient> http = new Lazy<HttpClient>(() => new());
     ICredential? credential;
@@ -53,7 +48,7 @@ class GitLabAuthHandler(HttpMessageHandler inner) : AuthHandler(inner)
         // default git auth for gitlab since it uses OAuth by default and does not include the 
         // read_api scope needed to download archives. So we need to restrict it to PAT and 
         // keep our own version instead.
-        var store = Devlooped::GitCredentialManager.CredentialManager.Create(ThisAssembly.Project.ToolCommandName);
+        var store = Devlooped::GitCredentialManager.CredentialManager.Create(ThisAssembly.Project.ProjectName);
 
         if (uri.PathAndQuery.Split('/', StringSplitOptions.RemoveEmptyEntries) is { Length: >= 2 } parts)
         {
@@ -72,7 +67,7 @@ class GitLabAuthHandler(HttpMessageHandler inner) : AuthHandler(inner)
             ["host"] = "gitlab.com",
         });
 
-        var context = CommandContext.Create(store, ThisAssembly.Project.ToolCommandName);
+        var context = CommandContext.Create(store, ThisAssembly.Project.ProjectName);
         var provider = new GitLabHostProvider(context, new ScopesGitLabAuth(new GitLabAuthentication(context)));
 
         try

@@ -1,7 +1,5 @@
-﻿using System;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading.Tasks;
 using Devlooped;
 using GitCredentialManager.UI;
 using Spectre.Console;

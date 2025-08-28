@@ -1,16 +1,12 @@
 ﻿extern alias Devlooped;
-using System;
-using System.Collections.Generic;
-using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Threading;
-using System.Threading.Tasks;
+using Core;
 using GitCredentialManager;
 using GitHub;
 
 namespace Devlooped.Http;
 
-class GitHubAuthHandler(HttpMessageHandler inner) : AuthHandler(inner)
+public class GitHubAuthHandler(HttpMessageHandler inner) : DelegatingHandler(inner)
 {
     ICredential? credential;
 
@@ -28,12 +24,8 @@ class GitHubAuthHandler(HttpMessageHandler inner) : AuthHandler(inner)
             if (creds == null)
                 return response;
 
-            var retry = new HttpRequestMessage(HttpMethod.Get, request.RequestUri);
+            var retry = response.CreateRetry(request.RequestUri);
             retry.Headers.Authorization = new AuthenticationHeaderValue("Bearer", creds.Password);
-            foreach (var etag in request.Headers.IfNoneMatch)
-            {
-                retry.Headers.IfNoneMatch.Add(etag);
-            }
 
             return await base.SendAsync(retry, cancellationToken);
         }

@@ -27,6 +27,14 @@ Usage: [dnx] gist GIST_REF [args]
 > The gist does not need to be public. In that case, the same authentication 
 > used by your local `git` will be used to access the gist, via the Git Credential Manager.
 
+Example:
+
+```
+dnx gist kzu/52b115ce24c7978ddc33245d4ff840f5 dotnet rocks
+```
+
+View [source gist](https://gist.github.com/kzu/52b115ce24c7978ddc33245d4ff840f5).
+
 <!-- #gist -->
 
 ## dnx runcs

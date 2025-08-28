@@ -4,7 +4,7 @@ using System.Net.Http;
 
 namespace Devlooped;
 
-static class Extensions
+static class HttpExtensions
 {
     public static bool IsRedirect(this HttpStatusCode status) =>
         status is HttpStatusCode.MovedPermanently or HttpStatusCode.Found or HttpStatusCode.SeeOther or HttpStatusCode.TemporaryRedirect or HttpStatusCode.PermanentRedirect;

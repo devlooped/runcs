@@ -7,6 +7,10 @@
     "gitlab": {
       "commandName": "Project",
       "commandLineArgs": "gitlab.com/kzu/runcs@main:program.cs"
+    },
+    "bitbucket": {
+      "commandName": "Project",
+      "commandLineArgs": "bitbucket.org/kzu/runcs@dev:program.cs"
     }
   }
 }

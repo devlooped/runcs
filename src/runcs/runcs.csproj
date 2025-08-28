@@ -24,6 +24,7 @@
     <PackageReference Include="DotNetConfig.Configuration" Version="1.2.0" />
     <PackageReference Include="Devlooped.CredentialManager" Version="42.42.42-main.506" Aliases="Devlooped" />
     <PackageReference Include="git-credential-manager" Version="2.6.1" IncludeAssets="tools" GeneratePathProperty="true" />
+    <PackageReference Include="LibGit2Sharp" Version="0.31.0" />
     <PackageReference Include="Spectre.Console" Version="0.48.0" />
     <PackageReference Include="ThisAssembly" Version="1.0.8" />
     <PackageReference Include="Avalonia" Version="11.1.3" />

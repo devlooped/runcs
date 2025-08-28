@@ -54,11 +54,11 @@ class GitHubAuthHandler(HttpMessageHandler inner) : AuthHandler(inner)
             uri.PathAndQuery.Split('/', StringSplitOptions.RemoveEmptyEntries) is { Length: >= 2 } parts)
         {
             // Try using GCM via API first to retrieve creds
-            if (GetCredential(store, $"https://github.com/{parts[0]}/{parts[1]}") is { } repo)
+            if (store.GetCredential($"https://github.com/{parts[0]}/{parts[1]}") is { } repo)
                 return repo;
-            else if (GetCredential(store, $"https://github.com/{parts[0]}") is { } owner)
+            else if (store.GetCredential($"https://github.com/{parts[0]}") is { } owner)
                 return owner;
-            else if (GetCredential(store, "https://github.com") is { } global)
+            else if (store.GetCredential("https://github.com") is { } global)
                 return global;
         }
 
@@ -81,21 +81,4 @@ class GitHubAuthHandler(HttpMessageHandler inner) : AuthHandler(inner)
             return null;
         }
     }
-
-    ICredential? GetCredential(Devlooped::GitCredentialManager.ICredentialStore store, string url)
-    {
-        var accounts = store.GetAccounts(url);
-        if (accounts.Count == 1)
-        {
-            var creds = store.Get(url, accounts[0]);
-            if (creds != null)
-            {
-                credential = new Credential(accounts[0], creds.Password);
-                return credential;
-            }
-        }
-        return default;
-    }
-
-    record Credential(string Account, string Password) : ICredential;
 }

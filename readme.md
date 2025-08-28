@@ -27,6 +27,8 @@ Usage: [dnx] gist GIST_REF [args]
 > The gist does not need to be public. In that case, the same authentication 
 > used by your local `git` will be used to access the gist, via the Git Credential Manager.
 
+<!-- #gist -->
+
 ## dnx runcs
 <!-- #runcs -->
 Run C# code programs from git repos on GitHub, GitLab, Bitbucket and Azure DevOps.
@@ -46,3 +48,20 @@ Usage: [dnx] runcs REPO_REF [args]
 
     args      Arguments to pass to the C# program
 ```
+
+<!-- #runcs -->
+
+# Dogfooding
+
+[![CI Version](https://img.shields.io/endpoint?url=https://shields.kzu.app/vpre/gist/main&label=nuget.ci&color=brightgreen)](https://pkg.kzu.app/index.json)
+
+We also produce CI packages from branches and pull requests so you can dogfood builds as quickly as they are produced. 
+
+The CI feed is `https://pkg.kzu.app/index.json`. 
+
+The versioning scheme for packages is:
+
+- PR builds: *42.42.[run]-pr*`[NUMBER]`
+- Branch builds: *42.42.[run]-*`[BRANCH]`
+
+<!-- include https://github.com/devlooped/sponsors/raw/main/footer.md -->

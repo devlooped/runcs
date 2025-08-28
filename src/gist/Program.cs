@@ -82,6 +82,13 @@ static async Task<int> Main(RemoteRef location, string[] args)
     var program = Path.Combine(location.TempPath, location.Path ?? "program.cs");
     if (!File.Exists(program))
     {
+        if (location.Path is not null)
+        {
+            AnsiConsole.MarkupLine($":cross_mark:  File reference not found in gist {location}.");
+            Dispatcher.MainThread.Shutdown();
+            return 1;
+        }
+
         var first = Directory.EnumerateFiles(location.TempPath, "*.cs", SearchOption.TopDirectoryOnly).FirstOrDefault();
         if (first is null)
         {

@@ -2,10 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
     <AssemblyName>Devlooped.Tests</AssemblyName>
     <RootNamespace>Devlooped.Tests</RootNamespace>
-    <LangVersion>Preview</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>

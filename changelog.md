@@ -1,5 +1,13 @@
 # Changelog
 
+## [v0.1.1](https://github.com/devlooped/runcs/tree/v0.1.1) (2025-08-28)
+
+[Full Changelog](https://github.com/devlooped/runcs/compare/v0.1.0...v0.1.1)
+
+:sparkles: Implemented enhancements:
+
+- Fail if explicit gist file path not found [\#3](https://github.com/devlooped/runcs/pull/3) (@kzu)
+
 ## [v0.1.0](https://github.com/devlooped/runcs/tree/v0.1.0) (2025-08-28)
 
 [Full Changelog](https://github.com/devlooped/runcs/compare/ce016575c85c447e1ebc5d2fa109908c92d89f5d...v0.1.0)

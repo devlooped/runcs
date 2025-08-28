@@ -12,15 +12,17 @@ if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
 
 if (args.Length == 0 || !RemoteRef.TryParse(args[0], out var location))
 {
-    AnsiConsole.MarkupLine($"Usage: [grey][[dnx]][/] [lime]{ThisAssembly.Project.ToolCommandName}[/] [italic]FILE_REF[/] [grey][[args]][/]");
+    AnsiConsole.MarkupLine($"Usage: [grey][[dnx]][/] [lime]{ThisAssembly.Project.ToolCommandName}[/] [italic]GIST_REF[/] [grey][[args]][/]");
     AnsiConsole.MarkupLine("""
-            [bold]FILE_REF[/]  Reference to gist file to run, with format [yellow]owner/gist[[@commit]][[:path]][/]
+            [bold]GIST_REF[/]  Reference to gist file to run, with format [yellow]owner/gist[[@commit]][[:path]][/]
                       [italic][yellow]@commit[/][/] optional gist commit (default: default branch)
                       [italic][yellow]:path[/][/] optional path to file in gist (default: program.cs or first .cs file)
 
                       Examples: 
-                      * kzu/0ac826d                 (tip commit and program.cs or first .cs file)
-                      * kzu/0ac826d@d8079cf:run.cs  (explicit commit and file path)
+                      * kzu/0ac826dc7de666546aaedd38e5965381                 (tip commit and program.cs or first .cs file)
+                      * kzu/0ac826dc7de666546aaedd38e5965381@d8079cf:run.cs  (explicit commit and file path)
+
+            [bold]args[/]      Arguments to pass to the C# gist program
         """);
     return;
 }

@@ -11,6 +11,8 @@
     <PackAsTool>true</PackAsTool>
     <PackageReadmeFile>readme.md</PackageReadmeFile>
     <PackageTags>dotnet dotnet-tool</PackageTags>
+
+    <Description>Run C# code from remote locations using: dnx runcs [host/]owner/repo[@ref][:path]</Description>
   </PropertyGroup>
 
   <ItemGroup>

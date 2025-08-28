@@ -11,6 +11,8 @@
     <PackAsTool>true</PackAsTool>
     <PackageReadmeFile>readme.md</PackageReadmeFile>
     <PackageTags>dotnet dotnet-tool</PackageTags>
+
+    <Description>Run gists directly using: dnx gist owner/gist[:path]</Description>
   </PropertyGroup>
 
   <ItemGroup>

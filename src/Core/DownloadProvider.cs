@@ -1,11 +1,7 @@
 ﻿extern alias Devlooped;
 using System.Diagnostics;
 using System.Net;
-using Atlassian.Bitbucket;
-using Core;
 using Devlooped.Http;
-using GitCredentialManager;
-using LibGit2Sharp;
 
 namespace Devlooped;
 
@@ -83,6 +79,7 @@ public class GitLabDownloadProvider : DownloadProvider
     }
 }
 
+/*
 public class BitbucketDownloadProvider : DownloadProvider
 {
     ICredential? credential;
@@ -195,3 +192,4 @@ public class BitbucketDownloadProvider : DownloadProvider
     }
 
 }
+*/

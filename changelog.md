@@ -1,5 +1,9 @@
 # Changelog
 
+## [v0.2.0](https://github.com/devlooped/runcs/tree/v0.2.0) (2025-08-29)
+
+[Full Changelog](https://github.com/devlooped/runcs/compare/v0.1.2...v0.2.0)
+
 ## [v0.1.2](https://github.com/devlooped/runcs/tree/v0.1.2) (2025-08-28)
 
 [Full Changelog](https://github.com/devlooped/runcs/compare/v0.1.1...v0.1.2)

@@ -8,11 +8,9 @@
 
   <ItemGroup>
     <PackageReference Include="DotNetConfig" Version="1.2.0" />
-    <PackageReference Include="DotNetConfig.Configuration" Version="1.2.0" />
     <PackageReference Include="Devlooped.CredentialManager" Version="42.42.517-main" Aliases="Devlooped" />
     <PackageReference Include="git-credential-manager" Version="2.6.1" IncludeAssets="tools" GeneratePathProperty="true" />
     <PackageReference Include="ThisAssembly.Project" Version="2.0.14" PrivateAssets="all" />
-    <PackageReference Include="LibGit2Sharp" Version="0.31.0" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(Pkggit-credential-manager)' != ''">

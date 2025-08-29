@@ -19,6 +19,8 @@ public class RemoteRefTests
         Assert.Equal(expectedRepo, result.Repo);
         Assert.Equal(expectedBranch, result.Ref);
         Assert.Equal(expectedPath, result.Path);
+
+        Assert.NotEmpty(result.TempPath);
     }
 
     [Theory]
@@ -44,6 +46,8 @@ public class RemoteRefTests
         Assert.Equal(expectedRepo, result.Repo);
         Assert.Equal(expectedBranch, result.Ref);
         Assert.Equal(expectedPath, result.Path);
+
+        Assert.NotEmpty(result.TempPath);
     }
 
     [Theory]
@@ -66,7 +70,9 @@ public class RemoteRefTests
         Assert.Equal(expectedOwner, result.Owner);
         Assert.Equal(expectedRepo, result.Repo);
         Assert.Equal(expectedBranch, result.Ref);
-        Assert.Equal(expectedPath, result.Path);
+        Assert.Equal(expectedPath, result.Path); Assert.NotEmpty(result.TempPath);
+
+        Assert.NotEmpty(result.TempPath);
     }
 
     [Theory]
@@ -88,6 +94,7 @@ public class RemoteRefTests
         Assert.Equal(expectedRepo, result.Repo);
         Assert.Equal(expectedBranch, result.Ref);
         Assert.Equal(expectedPath, result.Path);
+        Assert.NotEmpty(result.TempPath);
     }
 
     [Theory]
@@ -141,6 +148,7 @@ public class RemoteRefTests
         Assert.Equal(expectedRepo, result.Repo);
         Assert.Null(result.Ref);
         Assert.Null(result.Path);
+        Assert.NotEmpty(result.TempPath);
     }
 
     [Theory]
@@ -160,6 +168,7 @@ public class RemoteRefTests
         Assert.NotNull(result.Repo);
         Assert.NotNull(result.Ref);
         Assert.NotNull(result.Path);
+        Assert.NotEmpty(result.TempPath);
     }
 
     [Theory]
@@ -174,6 +183,7 @@ public class RemoteRefTests
         Assert.NotNull(result);
         Assert.NotEmpty(result.Owner);
         Assert.NotEmpty(result.Repo);
+        Assert.NotEmpty(result.TempPath);
     }
 
     [Theory]
@@ -191,6 +201,7 @@ public class RemoteRefTests
         Assert.Equal(expectedRepo, result.Repo);
         Assert.Equal(expectedBranch, result.Ref);
         Assert.Equal(expectedPath, result.Path);
+        Assert.NotEmpty(result.TempPath);
     }
 
     [Theory]
@@ -212,6 +223,7 @@ public class RemoteRefTests
         Assert.Equal(expectedRepo, result.Repo);
         Assert.Equal(expectedBranch, result.Ref);
         Assert.Equal(expectedPath, result.Path);
+        Assert.NotEmpty(result.TempPath);
     }
 
     [Theory]
@@ -228,6 +240,7 @@ public class RemoteRefTests
         Assert.Equal(expectedRepo, result.Repo);
         Assert.Equal(expectedBranch, result.Ref);
         Assert.Equal(expectedPath, result.Path);
+        Assert.NotEmpty(result.TempPath);
     }
 
     [Theory]
@@ -237,7 +250,7 @@ public class RemoteRefTests
     [InlineData("codeberg.org/dev/tool", "codeberg.org", "dev", "tool", null, null)]
     [InlineData("git.example.com/company/app", "git.example.com", "company", "app", null, null)]
     [InlineData("source.internal.org/internal/project", "source.internal.org", "internal", "project", null, null)]
-    [InlineData("dev.azure.com/org/project", "dev.azure.com", "org", "project", null, null)]
+    [InlineData("dev.azure.com/org/project/repo", "dev.azure.com", "org", "repo", null, null)]
     [InlineData("git.sr.ht/user/repo", "git.sr.ht", "user", "repo", null, null)]
     public void TryParse_WithHost_SetsHostAndOwnerRepo(string input, string expectedHost, string expectedOwner, string expectedRepo, string? expectedBranch, string? expectedPath)
     {
@@ -250,6 +263,7 @@ public class RemoteRefTests
         Assert.Equal(expectedRepo, result.Repo);
         Assert.Equal(expectedBranch, result.Ref);
         Assert.Equal(expectedPath, result.Path);
+        Assert.NotEmpty(result.TempPath);
     }
 
     [Theory]
@@ -272,6 +286,7 @@ public class RemoteRefTests
         Assert.Equal(expectedRepo, result.Repo);
         Assert.Equal(expectedBranch, result.Ref);
         Assert.Equal(expectedPath, result.Path);
+        Assert.NotEmpty(result.TempPath);
     }
 
     [Theory]
@@ -294,6 +309,7 @@ public class RemoteRefTests
         Assert.Equal(expectedRepo, result.Repo);
         Assert.Equal(expectedBranch, result.Ref);
         Assert.Equal(expectedPath, result.Path);
+        Assert.NotEmpty(result.TempPath);
     }
 
     [Theory]
@@ -316,6 +332,7 @@ public class RemoteRefTests
         Assert.Equal(expectedRepo, result.Repo);
         Assert.Equal(expectedBranch, result.Ref);
         Assert.Equal(expectedPath, result.Path);
+        Assert.NotEmpty(result.TempPath);
     }
 
     [Theory]
@@ -338,6 +355,7 @@ public class RemoteRefTests
         Assert.Equal(expectedRepo, result.Repo);
         Assert.Null(result.Ref);
         Assert.Null(result.Path);
+        Assert.NotEmpty(result.TempPath);
     }
 
     [Theory]
@@ -370,6 +388,7 @@ public class RemoteRefTests
         Assert.Equal(expectedHost, result.Host);
         Assert.Equal(expectedOwner, result.Owner);
         Assert.Equal(expectedRepo, result.Repo);
+        Assert.NotEmpty(result.TempPath);
     }
 
     [Theory]
@@ -390,6 +409,7 @@ public class RemoteRefTests
         Assert.NotNull(result.Ref);
         Assert.NotNull(result.Path);
         Assert.Contains(".", result.Host); // Should have a TLD
+        Assert.NotEmpty(result.TempPath);
     }
 
     [Fact]
@@ -404,6 +424,7 @@ public class RemoteRefTests
         Assert.Equal("repo", result.Repo);
         Assert.Equal("main", result.Ref);
         Assert.Equal("file.txt", result.Path);
+        Assert.NotEmpty(result.TempPath);
     }
 
     [Theory]
@@ -421,6 +442,7 @@ public class RemoteRefTests
         Assert.Equal(expectedHost, result.Host);
         Assert.Equal(expectedOwner, result.Owner);
         Assert.Equal(expectedRepo, result.Repo);
+        Assert.NotEmpty(result.TempPath);
     }
 
     [Theory]
@@ -435,6 +457,7 @@ public class RemoteRefTests
         Assert.NotNull(result.Host);
         Assert.NotNull(result.Owner);
         Assert.NotNull(result.Repo);
+        Assert.NotEmpty(result.TempPath);
     }
 
     [Theory]

@@ -8,6 +8,10 @@
       "commandName": "Project",
       "commandLineArgs": "gitlab.com/kzu/runcs@main:program.cs"
     },
+    "devops": {
+      "commandName": "Project",
+      "commandLineArgs": "dev.azure.com/kzu/runcs/runcs@77d857042555c4e60afdb6c41256b2820d6ca14c"
+    },
     "bitbucket": {
       "commandName": "Project",
       "commandLineArgs": "bitbucket.org/kzu/runcs@dev:program.cs"

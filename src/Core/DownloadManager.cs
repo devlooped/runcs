@@ -6,7 +6,7 @@ public static class DownloadManager
 {
     extension(RemoteRef location)
     {
-        public string TempPath => Path.Join(GetTempRoot(), location.Owner, location.Repo, location.Ref ?? "main");
+        public string TempPath => Path.Join(GetTempRoot(), location.Host ?? "github.com", location.Owner, location.Project ?? "", location.Repo, location.Ref ?? "main");
     }
 
     /// <summary>

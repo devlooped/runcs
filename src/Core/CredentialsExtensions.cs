@@ -1,7 +1,7 @@
 ﻿extern alias Devlooped;
 using GitCredentialManager;
 
-namespace Core;
+namespace Devlooped;
 
 public static class CredentialsExtensions
 {

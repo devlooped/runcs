@@ -3,7 +3,7 @@
 namespace Devlooped.Http;
 
 /// <summary>A handler that redirects traffic preserving auth/etag headers to originating domain or subdomains.</summary>
-public sealed class RedirectingHttpHandler(HttpMessageHandler innerHandler) : DelegatingHandler(innerHandler)
+public sealed class RedirectingHttpHandler(HttpMessageHandler innerHandler, params string[] followHosts) : DelegatingHandler(innerHandler)
 {
     /// <summary>Maximum number of redirects to follow. Default is 10.</summary>
     public int MaxRedirects { get; set; } = 10;
@@ -29,7 +29,8 @@ public sealed class RedirectingHttpHandler(HttpMessageHandler innerHandler) : De
 
             var nextHost = NormalizeHost(nextUri.Host);
             // Never redirect to a different domain (security)
-            if (!IsWithinSubdomain(originalHost, nextHost))
+            if (!IsWithinSubdomain(originalHost, nextHost) &&
+                !followHosts.Any(host => IsWithinSubdomain(host, nextHost)))
                 return response;
 
             // Limit to prevent loops

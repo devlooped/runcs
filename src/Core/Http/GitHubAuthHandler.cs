@@ -1,6 +1,5 @@
 ﻿extern alias Devlooped;
 using System.Net.Http.Headers;
-using Core;
 using GitCredentialManager;
 using GitHub;
 

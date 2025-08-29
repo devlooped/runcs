@@ -1,6 +1,9 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.Diagnostics;
+using System.Net;
+using System.Runtime.InteropServices;
 using System.Text;
 using Devlooped;
+using DotNetConfig;
 using GitCredentialManager.UI;
 using Spectre.Console;
 
@@ -19,7 +22,6 @@ if (args.Length == 0 || !RemoteRef.TryParse(args[0], out var location))
                       Examples: 
                       * kzu/sandbox@v1.0.0:run.cs           (implied host github.com, explicit tag and file path)
                       * gitlab.com/kzu/sandbox@main:run.cs  (all explicit parts)
-                      * bitbucket.org/kzu/sandbox           (implied ref as default branch and path as program.cs)
                       * kzu/sandbox                         (implied host github.com, ref and path defaults)
 
             [bold]args[/]      Arguments to pass to the C# program
@@ -48,11 +50,86 @@ Environment.Exit(await main);
 
 static async Task<int> Main(RemoteRef location, string[] args)
 {
+    var config = Config.Build(Config.GlobalLocation);
+    var etag = config.GetString(ThisAssembly.Project.ToolCommandName, $"{location.Owner}/{location.Repo}", location.Ref ?? "main");
+    if (etag != null && Directory.Exists(location.TempPath))
+    {
+        if (etag.StartsWith("W/\"", StringComparison.OrdinalIgnoreCase) && !etag.EndsWith('"'))
+            etag += '"';
+
+        location = location with { ETag = etag };
+    }
+
+    if (DotnetMuxer.Path is null)
+    {
+        AnsiConsole.MarkupLine($":cross_mark:  Unable to locate the .NET SDK.");
+        Dispatcher.MainThread.Shutdown();
+        return 1;
+    }
+
     var provider = DownloadProvider.Create(location);
     var contents = await provider.GetAsync(location);
+    var updated = false;
 
-    AnsiConsole.MarkupLine($":check_box_with_check:  {location} :backhand_index_pointing_right: {contents.StatusCode}");
+    if (!contents.IsSuccessStatusCode)
+    {
+        AnsiConsole.MarkupLine($":cross_mark: Reference [yellow]{location}[/] not found.");
+        Dispatcher.MainThread.Shutdown();
+        return 1;
+    }
+
+    if (contents.StatusCode != HttpStatusCode.NotModified)
+    {
+#if DEBUG
+        await AnsiConsole.Status().StartAsync($":open_file_folder: {location} :backhand_index_pointing_right: {location.TempPath}", async ctx =>
+        {
+            await contents.ExtractToAsync(location);
+        });
+#else
+        await contents.ExtractToAsync(location);
+#endif
+
+        if (contents.Headers.ETag?.ToString() is { } newEtag)
+            config.SetString(ThisAssembly.Project.ToolCommandName, $"{location.Owner}/{location.Repo}", location.Ref ?? "main", newEtag);
+
+        updated = true;
+    }
+
+    var program = Path.Combine(location.TempPath, location.Path ?? "program.cs");
+    if (!File.Exists(program))
+    {
+        if (location.Path is not null)
+        {
+            AnsiConsole.MarkupLine($":cross_mark:  File reference not found in gist {location}.");
+            Dispatcher.MainThread.Shutdown();
+            return 1;
+        }
+
+        var first = Directory.EnumerateFiles(location.TempPath, "*.cs", SearchOption.TopDirectoryOnly).FirstOrDefault();
+        if (first is null)
+        {
+            AnsiConsole.MarkupLine($":cross_mark:  No .cs files found in gist {location}.");
+            Dispatcher.MainThread.Shutdown();
+            return 1;
+        }
+        program = first;
+    }
+
+    if (updated)
+    {
+        // Clean since it otherwise we get stale build outputs :/
+        Process.Start(DotnetMuxer.Path.FullName, ["clean", "-v:q", program]).WaitForExit();
+    }
+
+#if DEBUG
+    AnsiConsole.MarkupLine($":rocket: {DotnetMuxer.Path.FullName} run -v:q {program} {string.Join(' ', args)}");
+#endif
+
+    var start = new ProcessStartInfo(DotnetMuxer.Path.FullName, ["run", "-v:q", program, .. args]);
+    var process = Process.Start(start);
+    process?.WaitForExit();
 
     Dispatcher.MainThread.Shutdown();
-    return 0;
+
+    return process?.ExitCode ?? 1;
 }

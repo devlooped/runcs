@@ -1,7 +1,6 @@
 ﻿extern alias Devlooped;
 using System.Net;
 using Atlassian.Bitbucket;
-using Core;
 using GitCredentialManager;
 using GitCredentialManager.Authentication.OAuth;
 

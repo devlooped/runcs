@@ -69,9 +69,23 @@ static async Task<int> Main(RemoteRef location, string[] args)
     var contents = await provider.GetAsync(location);
     var updated = false;
 
-    if (contents.IsSuccessStatusCode && contents.StatusCode != HttpStatusCode.NotModified)
+    if (!contents.IsSuccessStatusCode)
     {
+        AnsiConsole.MarkupLine($":cross_mark: Reference [yellow]{location}[/] not found.");
+        Dispatcher.MainThread.Shutdown();
+        return 1;
+    }
+
+    if (contents.StatusCode != HttpStatusCode.NotModified)
+    {
+#if DEBUG
+        await AnsiConsole.Status().StartAsync($":open_file_folder: {location} :backhand_index_pointing_right: {location.TempPath}", async ctx =>
+        {
+            await contents.ExtractToAsync(location);
+        });
+#else
         await contents.ExtractToAsync(location);
+#endif
 
         if (contents.Headers.ETag?.ToString() is { } newEtag)
             config.SetString(ThisAssembly.Project.ToolCommandName, $"{location.Owner}/{location.Repo}", location.Ref ?? "main", newEtag);

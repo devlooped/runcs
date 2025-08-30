@@ -1,44 +1,10 @@
-![Icon](https://raw.githubusercontent.com/devlooped/runcs/main/assets/img/icon-32.png) dnx gist
+![Icon](https://raw.githubusercontent.com/devlooped/runcs/main/assets/img/icon-32.png) dnx runcs
 ============
 
 [![Version](https://img.shields.io/nuget/vpre/gist.svg?color=royalblue)](https://www.nuget.org/packages/gist)
 [![Downloads](https://img.shields.io/nuget/dt/gist.svg?color=green)](https://www.nuget.org/packages/gist)
 [![License](https://img.shields.io/github/license/devlooped/runcs.svg?color=blue)](https://github.com/devlooped/runcs/blob/main/license.txt)
 [![Build](https://github.com/devlooped/runcs/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/devlooped/runcs/actions/workflows/build.yml)
-
-## dnx gist
-<!-- #gist -->
-Run C# code programs from GitHub gists.
-
-```
-Usage: [dnx] gist GIST_REF [args]
-    GIST_REF  Reference to gist file to run, with format owner/gist[@commit][:path]
-              @commit optional gist commit (default: default branch)
-              :path optional path to file in gist (default: program.cs or first .cs file)
-
-              Examples:
-              * kzu/0ac826dc7de666546aaedd38e5965381                 (tip commit and program.cs or first .cs file)
-              * kzu/0ac826dc7de666546aaedd38e5965381@d8079cf:run.cs  (explicit commit and file path)
-
-    args      Arguments to pass to the C# gist program
-```
-
-> [!TIP]
-> The gist does not need to be public. In that case, the same authentication 
-> used by your local `git` will be used to access the gist, via the Git Credential Manager.
-
-Example:
-
-```
-dnx gist kzu/52b115ce24c7978ddc33245d4ff840f5 dotnet rocks
-```
-
-View [source gist](https://gist.github.com/kzu/52b115ce24c7978ddc33245d4ff840f5).
-
-When running different files from the same repo+ref, the download will be performed only once.
-The last download etag is used to avoid downloading on each run.
-
-<!-- #gist -->
 
 ## dnx runcs
 <!-- #runcs -->
@@ -78,6 +44,40 @@ When running different files from the same repo+ref, the download will be perfor
 The last download etag is used to avoid downloading on each run.
 
 <!-- #runcs -->
+
+## dnx gist
+<!-- #gist -->
+Run C# code programs from GitHub gists.
+
+```
+Usage: [dnx] gist GIST_REF [args]
+    GIST_REF  Reference to gist file to run, with format owner/gist[@commit][:path]
+              @commit optional gist commit (default: default branch)
+              :path optional path to file in gist (default: program.cs or first .cs file)
+
+              Examples:
+              * kzu/0ac826dc7de666546aaedd38e5965381                 (tip commit and program.cs or first .cs file)
+              * kzu/0ac826dc7de666546aaedd38e5965381@d8079cf:run.cs  (explicit commit and file path)
+
+    args      Arguments to pass to the C# gist program
+```
+
+> [!TIP]
+> The gist does not need to be public. In that case, the same authentication 
+> used by your local `git` will be used to access the gist, via the Git Credential Manager.
+
+Example:
+
+```
+dnx gist kzu/52b115ce24c7978ddc33245d4ff840f5 dotnet rocks
+```
+
+View [source gist](https://gist.github.com/kzu/52b115ce24c7978ddc33245d4ff840f5).
+
+When running different files from the same repo+ref, the download will be performed only once.
+The last download etag is used to avoid downloading on each run.
+
+<!-- #gist -->
 
 # Dogfooding
 

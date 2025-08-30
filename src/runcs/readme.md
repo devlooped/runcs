@@ -3,20 +3,37 @@
 Run C# code programs from git repos on GitHub, GitLab, Bitbucket and Azure DevOps.
 
 ```
-Usage: [dnx] runcs REPO_REF [args]
-    REPO_REF  Reference to remote file to run, with format [host/]owner/repo[@ref][:path]
-              host optional host name (default: github.com)
-              @ref optional branch, tag, or commit (default: default branch)
-              :path optional path to file in repo (default: program.cs at repo root)
+Usage:
+    [dnx] runcs <repoRef> [<appArgs>...]
 
-              Examples:
-              * kzu/sandbox@v1.0.0:run.cs           (implied host github.com, explicit tag and file path)
-              * gitlab.com/kzu/sandbox@main:run.cs  (all explicit parts)
-              * bitbucket.org/kzu/sandbox           (implied ref as default branch and path as program.cs)
-              * kzu/sandbox                         (implied host github.com, ref and path defaults)
+Arguments:
+    <REPO_REF>  Reference to remote file to run, with format [host/]owner/repo[@ref][:path]
+                host optional host name ([gist.]github.com|gitlab.com|dev.azure.com, default: github.com)
+                @ref optional branch, tag, or commit (default: default branch)
+                :path optional path to file in repo (default: program.cs at repo root)
 
-    args      Arguments to pass to the C# program
+                Examples:
+                * kzu/sandbox@v1.0.0:run.cs           (implied host github.com, explicit tag and file path)
+                * gitlab.com/kzu/sandbox@main:run.cs  (all explicit parts)
+                * kzu/sandbox                         (implied host github.com, ref and path defaults)
+
+    <appArgs>   Arguments passed to the C# program that is being run.
 ```
+
+Example:
+
+```
+dnx runcs kzu/runcs@v1:run.cs dotnet rocks
+```
+
+View [source](https://github.com/kzu/runcs/blob/v1/run.cs).
+
+> [!TIP]
+> The repo does not need to be public. In that case, the same authentication 
+> used by your local `git` will be used to access the gist, via the Git Credential Manager.
+
+When running different files from the same repo+ref, the download will be performed only once.
+The last download etag is used to avoid downloading on each run.
 
 <!-- #runcs -->
 <!-- ../../readme.md#runcs -->

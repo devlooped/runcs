@@ -1,5 +1,14 @@
 # Changelog
 
+## [v0.3.0](https://github.com/devlooped/runcs/tree/v0.3.0) (2025-08-30)
+
+[Full Changelog](https://github.com/devlooped/runcs/compare/v0.2.0...v0.3.0)
+
+:sparkles: Implemented enhancements:
+
+- Unify implementation across gist/runcs [\#7](https://github.com/devlooped/runcs/pull/7) (@kzu)
+- Add support for downloading and running Azure DevOps too [\#6](https://github.com/devlooped/runcs/pull/6) (@kzu)
+
 ## [v0.2.0](https://github.com/devlooped/runcs/tree/v0.2.0) (2025-08-29)
 
 [Full Changelog](https://github.com/devlooped/runcs/compare/v0.1.2...v0.2.0)

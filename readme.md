@@ -65,6 +65,8 @@ Example:
 dnx kzu/runcs@v1:run.cs dotnet rocks
 ```
 
+View [source](https://github.com/kzu/runcs/blob/v1/run.cs).
+
 
 <!-- #runcs -->
 

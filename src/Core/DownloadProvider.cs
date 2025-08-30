@@ -12,6 +12,7 @@ public abstract class DownloadProvider
         "gitlab.com" => new GitLabDownloadProvider(),
         "dev.azure.com" => new AzureDevOpsDownloadProvider(),
         //"bitbucket.org" => new BitbucketDownloadProvider(),
+        "gist.github.com" => new GitHubDownloadProvider(gist: true),
         _ => new GitHubDownloadProvider(),
     };
 

@@ -11,7 +11,7 @@ public static class HttpExtensions
         if (Directory.Exists(location.TempPath))
             Directory.Delete(location.TempPath, true);
 
-        Directory.CreateDirectory(location.TempPath);
+        location.EnsureTempPath();
 
         // Extract files while skipping the top-level directory and preserving structure from that point onwards
         // This matches the behavior of github/gitlab archive downloads.
@@ -43,7 +43,7 @@ public static class HttpExtensions
             // Ensure the directory exists
             var directoryPath = Path.GetDirectoryName(destinationPath);
             if (!string.IsNullOrEmpty(directoryPath))
-                Directory.CreateDirectory(directoryPath);
+                Directory.CreateUserDirectory(directoryPath);
 
             entry.ExtractToFile(destinationPath);
         }

@@ -6,8 +6,6 @@
     <AssemblyName>runcs</AssemblyName>
     <RootNamespace>Devlooped</RootNamespace>
 
-    <!-- For now, disable packing since it's not ready yet -->
-    <IsPackable>false</IsPackable>
     <PackageId>runcs</PackageId>
     <ToolCommandName>runcs</ToolCommandName>
     <PackAsTool>true</PackAsTool>

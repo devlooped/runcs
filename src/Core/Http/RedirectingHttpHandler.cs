@@ -22,7 +22,10 @@ public sealed class RedirectingHttpHandler(HttpMessageHandler innerHandler, para
             var response = await base.SendAsync(currentRequest, cancellationToken).ConfigureAwait(false);
 
             if (!response.StatusCode.IsRedirect() || response.Headers.Location is null)
+            {
+                response.Headers.TryAddWithoutValidation("X-Original-URI", originalUri.AbsoluteUri);
                 return response;
+            }
 
             var location = response.Headers.Location;
             var nextUri = location.IsAbsoluteUri ? location : new Uri(currentRequest.RequestUri!, location);
@@ -75,8 +78,6 @@ public sealed class RedirectingHttpHandler(HttpMessageHandler innerHandler, para
 
             // Copy headers (preserve conditional ones like If-None-Match)
             CopyHeaders(currentRequest, next);
-
-            next.Headers.TryAddWithoutValidation("X-Original-URI", originalUri.AbsoluteUri);
 
             // We're not going to read this 3xx body; free the socket.
             response.Dispose();

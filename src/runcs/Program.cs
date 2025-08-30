@@ -1,9 +1,6 @@
-﻿using System.Diagnostics;
-using System.Net;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 using System.Text;
 using Devlooped;
-using DotNetConfig;
 using GitCredentialManager.UI;
 using Spectre.Console;
 
@@ -12,19 +9,23 @@ if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
 
 if (args.Length == 0 || !RemoteRef.TryParse(args[0], out var location))
 {
-    AnsiConsole.MarkupLine($"Usage: [grey][[dnx]][/] [lime]{ThisAssembly.Project.ToolCommandName}[/] [italic]REPO_REF[/] [grey][[args]][/]");
-    AnsiConsole.MarkupLine("""
-            [bold]REPO_REF[/]  Reference to remote file to run, with format [yellow][[host/]]owner/repo[[@ref]][[:path]][/]
-                      [italic][yellow]host[/][/] optional host name (default: github.com)
-                      [italic][yellow]@ref[/][/] optional branch, tag, or commit (default: default branch)
-                      [italic][yellow]:path[/][/] optional path to file in repo (default: program.cs at repo root)
+    AnsiConsole.MarkupLine(
+        $"""
+        Usage:
+            [grey][[dnx]][/] [lime]{ThisAssembly.Project.ToolCommandName}[/] [bold]<repoRef>[/] [grey italic][[<appArgs>...]][/]
 
-                      Examples: 
-                      * kzu/sandbox@v1.0.0:run.cs           (implied host github.com, explicit tag and file path)
-                      * gitlab.com/kzu/sandbox@main:run.cs  (all explicit parts)
-                      * kzu/sandbox                         (implied host github.com, ref and path defaults)
-
-            [bold]args[/]      Arguments to pass to the C# program
+        Arguments:
+            [bold]<REPO_REF>[/]  Reference to remote file to run, with format [yellow][[host/]]owner/repo[[@ref]][[:path]][/]
+                        [italic][yellow]host[/][/] optional host name ([grey][[gist.]][/]github.com|gitlab.com|dev.azure.com, default: github.com)
+                        [italic][yellow]@ref[/][/] optional branch, tag, or commit (default: default branch)
+                        [italic][yellow]:path[/][/] optional path to file in repo (default: program.cs at repo root)
+                  
+                        Examples: 
+                        * kzu/sandbox@v1.0.0:run.cs           (implied host github.com, explicit tag and file path)
+                        * gitlab.com/kzu/sandbox@main:run.cs  (all explicit parts)
+                        * kzu/sandbox                         (implied host github.com, ref and path defaults)
+                  
+            [bold]<appArgs>[/]   Arguments passed to the C# program that is being run. 
         """);
     return;
 }
@@ -37,7 +38,14 @@ Dispatcher.Initialize();
 
 // Run AppMain in a new thread and keep the main thread free
 // to process the dispatcher's job queue.
-var main = Task.Run(() => Main(location, args[1..]));
+var main = Task
+    .Run(() => new RemoteRunner(location, ThisAssembly.Project.ToolCommandName)
+    .RunAsync(args[1..]))
+    .ContinueWith(t =>
+    {
+        Dispatcher.MainThread.Shutdown();
+        return t.Result;
+    });
 
 // Process the dispatcher job queue (aka: message pump, run-loop, etc...)
 // We must ensure to run this on the same thread that it was created on
@@ -47,89 +55,3 @@ Dispatcher.MainThread.Run();
 
 // Dispatcher was shutdown
 Environment.Exit(await main);
-
-static async Task<int> Main(RemoteRef location, string[] args)
-{
-    var config = Config.Build(Config.GlobalLocation);
-    var etag = config.GetString(ThisAssembly.Project.ToolCommandName, $"{location.Owner}/{location.Repo}", location.Ref ?? "main");
-    if (etag != null && Directory.Exists(location.TempPath))
-    {
-        if (etag.StartsWith("W/\"", StringComparison.OrdinalIgnoreCase) && !etag.EndsWith('"'))
-            etag += '"';
-
-        location = location with { ETag = etag };
-    }
-
-    if (DotnetMuxer.Path is null)
-    {
-        AnsiConsole.MarkupLine($":cross_mark:  Unable to locate the .NET SDK.");
-        Dispatcher.MainThread.Shutdown();
-        return 1;
-    }
-
-    var provider = DownloadProvider.Create(location);
-    var contents = await provider.GetAsync(location);
-    var updated = false;
-
-    if (!contents.IsSuccessStatusCode)
-    {
-        AnsiConsole.MarkupLine($":cross_mark: Reference [yellow]{location}[/] not found.");
-        Dispatcher.MainThread.Shutdown();
-        return 1;
-    }
-
-    if (contents.StatusCode != HttpStatusCode.NotModified)
-    {
-#if DEBUG
-        await AnsiConsole.Status().StartAsync($":open_file_folder: {location} :backhand_index_pointing_right: {location.TempPath}", async ctx =>
-        {
-            await contents.ExtractToAsync(location);
-        });
-#else
-        await contents.ExtractToAsync(location);
-#endif
-
-        if (contents.Headers.ETag?.ToString() is { } newEtag)
-            config.SetString(ThisAssembly.Project.ToolCommandName, $"{location.Owner}/{location.Repo}", location.Ref ?? "main", newEtag);
-
-        updated = true;
-    }
-
-    var program = Path.Combine(location.TempPath, location.Path ?? "program.cs");
-    if (!File.Exists(program))
-    {
-        if (location.Path is not null)
-        {
-            AnsiConsole.MarkupLine($":cross_mark:  File reference not found in gist {location}.");
-            Dispatcher.MainThread.Shutdown();
-            return 1;
-        }
-
-        var first = Directory.EnumerateFiles(location.TempPath, "*.cs", SearchOption.TopDirectoryOnly).FirstOrDefault();
-        if (first is null)
-        {
-            AnsiConsole.MarkupLine($":cross_mark:  No .cs files found in gist {location}.");
-            Dispatcher.MainThread.Shutdown();
-            return 1;
-        }
-        program = first;
-    }
-
-    if (updated)
-    {
-        // Clean since it otherwise we get stale build outputs :/
-        Process.Start(DotnetMuxer.Path.FullName, ["clean", "-v:q", program]).WaitForExit();
-    }
-
-#if DEBUG
-    AnsiConsole.MarkupLine($":rocket: {DotnetMuxer.Path.FullName} run -v:q {program} {string.Join(' ', args)}");
-#endif
-
-    var start = new ProcessStartInfo(DotnetMuxer.Path.FullName, ["run", "-v:q", program, .. args]);
-    var process = Process.Start(start);
-    process?.WaitForExit();
-
-    Dispatcher.MainThread.Shutdown();
-
-    return process?.ExitCode ?? 1;
-}

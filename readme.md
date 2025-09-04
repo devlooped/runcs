@@ -8,7 +8,7 @@
 
 ## dnx runcs
 <!-- #runcs -->
-Run C# code programs from git repos on GitHub, GitLab, Bitbucket and Azure DevOps.
+Run C# code programs from git repos on GitHub, GitLab and Azure DevOps.
 
 ```
 Usage:

@@ -3,16 +3,16 @@
 Run C# code programs from GitHub gists.
 
 ```
-Usage: [dnx] gist GIST_REF [args]
-    GIST_REF  Reference to gist file to run, with format owner/gist[@commit][:path]
-              @commit optional gist commit (default: default branch)
-              :path optional path to file in gist (default: program.cs or first .cs file)
+Usage: [dnx] gist <gistRef> [<appArgs>...]
+    <GIST_REF>  Reference to gist file to run, with format owner/gist[@commit][:path]
+                @commit optional gist commit (default: default branch)
+                :path optional path to file in gist (default: program.cs or first .cs file)
 
-              Examples:
-              * kzu/0ac826dc7de666546aaedd38e5965381                 (tip commit and program.cs or first .cs file)
-              * kzu/0ac826dc7de666546aaedd38e5965381@d8079cf:run.cs  (explicit commit and file path)
+                Examples:
+                * kzu/0ac826dc7de666546aaedd38e5965381                 (tip commit and program.cs or first .cs file)
+                * kzu/0ac826dc7de666546aaedd38e5965381@d8079cf:run.cs  (explicit commit and file path)
 
-    args      Arguments to pass to the C# gist program
+    <appArgs>   Arguments passed to the C# program gist that is being run.
 ```
 
 > [!TIP]
@@ -38,7 +38,6 @@ The last download etag is used to avoid downloading on each run.
 <!-- sponsors.md -->
 [![Clarius Org](https://raw.githubusercontent.com/devlooped/sponsors/main/.github/avatars/clarius.png "Clarius Org")](https://github.com/clarius)
 [![MFB Technologies, Inc.](https://raw.githubusercontent.com/devlooped/sponsors/main/.github/avatars/MFB-Technologies-Inc.png "MFB Technologies, Inc.")](https://github.com/MFB-Technologies-Inc)
-[![Torutek](https://raw.githubusercontent.com/devlooped/sponsors/main/.github/avatars/torutek-gh.png "Torutek")](https://github.com/torutek-gh)
 [![DRIVE.NET, Inc.](https://raw.githubusercontent.com/devlooped/sponsors/main/.github/avatars/drivenet.png "DRIVE.NET, Inc.")](https://github.com/drivenet)
 [![Keith Pickford](https://raw.githubusercontent.com/devlooped/sponsors/main/.github/avatars/Keflon.png "Keith Pickford")](https://github.com/Keflon)
 [![Thomas Bolon](https://raw.githubusercontent.com/devlooped/sponsors/main/.github/avatars/tbolon.png "Thomas Bolon")](https://github.com/tbolon)
@@ -65,7 +64,6 @@ The last download etag is used to avoid downloading on each run.
 [![Justin Wendlandt](https://raw.githubusercontent.com/devlooped/sponsors/main/.github/avatars/jwendl.png "Justin Wendlandt")](https://github.com/jwendl)
 [![Adrian Alonso](https://raw.githubusercontent.com/devlooped/sponsors/main/.github/avatars/adalon.png "Adrian Alonso")](https://github.com/adalon)
 [![Michael Hagedorn](https://raw.githubusercontent.com/devlooped/sponsors/main/.github/avatars/Eule02.png "Michael Hagedorn")](https://github.com/Eule02)
-[![Sebastien Lebreton](https://raw.githubusercontent.com/devlooped/sponsors/main/.github/avatars/sailro.png "Sebastien Lebreton")](https://github.com/sailro)
 [![torutek](https://raw.githubusercontent.com/devlooped/sponsors/main/.github/avatars/torutek.png "torutek")](https://github.com/torutek)
 
 

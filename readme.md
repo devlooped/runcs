@@ -1,8 +1,8 @@
 ![Icon](https://raw.githubusercontent.com/devlooped/runcs/main/assets/img/icon-32.png) dnx runcs
 ============
 
-[![Version](https://img.shields.io/nuget/vpre/gist.svg?color=royalblue)](https://www.nuget.org/packages/gist)
-[![Downloads](https://img.shields.io/nuget/dt/gist.svg?color=green)](https://www.nuget.org/packages/gist)
+[![Version](https://img.shields.io/nuget/vpre/runcs.svg?color=royalblue)](https://www.nuget.org/packages/runcs)
+[![Downloads](https://img.shields.io/nuget/dt/runcs.svg?color=green)](https://www.nuget.org/packages/runcs)
 [![License](https://img.shields.io/github/license/devlooped/runcs.svg?color=blue)](https://github.com/devlooped/runcs/blob/main/license.txt)
 [![Build](https://github.com/devlooped/runcs/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/devlooped/runcs/actions/workflows/build.yml)
 
@@ -50,16 +50,16 @@ The last download etag is used to avoid downloading on each run.
 Run C# code programs from GitHub gists.
 
 ```
-Usage: [dnx] gist GIST_REF [args]
-    GIST_REF  Reference to gist file to run, with format owner/gist[@commit][:path]
-              @commit optional gist commit (default: default branch)
-              :path optional path to file in gist (default: program.cs or first .cs file)
+Usage: [dnx] gist <gistRef> [<appArgs>...]
+    <GIST_REF>  Reference to gist file to run, with format owner/gist[@commit][:path]
+                @commit optional gist commit (default: default branch)
+                :path optional path to file in gist (default: program.cs or first .cs file)
 
-              Examples:
-              * kzu/0ac826dc7de666546aaedd38e5965381                 (tip commit and program.cs or first .cs file)
-              * kzu/0ac826dc7de666546aaedd38e5965381@d8079cf:run.cs  (explicit commit and file path)
+                Examples:
+                * kzu/0ac826dc7de666546aaedd38e5965381                 (tip commit and program.cs or first .cs file)
+                * kzu/0ac826dc7de666546aaedd38e5965381@d8079cf:run.cs  (explicit commit and file path)
 
-    args      Arguments to pass to the C# gist program
+    <appArgs>   Arguments passed to the C# program gist that is being run.
 ```
 
 > [!TIP]

@@ -251,6 +251,8 @@ public class RemoteRefTests
     [InlineData("git.example.com/company/app", "git.example.com", "company", "app", null, null)]
     [InlineData("source.internal.org/internal/project", "source.internal.org", "internal", "project", null, null)]
     [InlineData("dev.azure.com/org/project/repo", "dev.azure.com", "org", "repo", null, null)]
+    [InlineData("dev.azure.com/org/project/repo%20space", "dev.azure.com", "org", "repo%20space", null, null)]
+    [InlineData("dev.azure.com/org/project%20space/repo%20space", "dev.azure.com", "org", "repo%20space", null, null)]
     [InlineData("git.sr.ht/user/repo", "git.sr.ht", "user", "repo", null, null)]
     public void TryParse_WithHost_SetsHostAndOwnerRepo(string input, string expectedHost, string expectedOwner, string expectedRepo, string? expectedBranch, string? expectedPath)
     {
@@ -273,7 +275,7 @@ public class RemoteRefTests
     [InlineData("codeberg.org/dev/tool@v1.0.0", "codeberg.org", "dev", "tool", "v1.0.0", null)]
     [InlineData("git.example.com/company/app@release/2024", "git.example.com", "company", "app", "release/2024", null)]
     [InlineData("source.internal.org/internal/project@hotfix/urgent", "source.internal.org", "internal", "project", "hotfix/urgent", null)]
-    [InlineData("dev.azure.com/org/project@refs/heads/main", "dev.azure.com", "org", "project", "refs/heads/main", null)]
+    [InlineData("dev.azure.com/org/project/repo@refs/heads/main", "dev.azure.com", "org", "repo", "refs/heads/main", null)]
     [InlineData("git.sr.ht/user/repo@master", "git.sr.ht", "user", "repo", "master", null)]
     public void TryParse_WithHostAndBranch_SetsHostOwnerRepoAndBranch(string input, string expectedHost, string expectedOwner, string expectedRepo, string expectedBranch, string? expectedPath)
     {
@@ -296,7 +298,7 @@ public class RemoteRefTests
     [InlineData("codeberg.org/dev/tool:lib/utils.py", "codeberg.org", "dev", "tool", null, "lib/utils.py")]
     [InlineData("git.example.com/company/app:frontend/index.html", "git.example.com", "company", "app", null, "frontend/index.html")]
     [InlineData("source.internal.org/internal/project:scripts/deploy.sh", "source.internal.org", "internal", "project", null, "scripts/deploy.sh")]
-    [InlineData("dev.azure.com/org/project:azure-pipelines.yml", "dev.azure.com", "org", "project", null, "azure-pipelines.yml")]
+    [InlineData("dev.azure.com/org/project/repo:azure-pipelines.yml", "dev.azure.com", "org", "repo", null, "azure-pipelines.yml")]
     [InlineData("git.sr.ht/user/repo:Makefile", "git.sr.ht", "user", "repo", null, "Makefile")]
     public void TryParse_WithHostAndPath_SetsHostOwnerRepoAndPath(string input, string expectedHost, string expectedOwner, string expectedRepo, string? expectedBranch, string expectedPath)
     {
@@ -319,7 +321,7 @@ public class RemoteRefTests
     [InlineData("codeberg.org/dev/tool@v2.1.0:lib/utils.py", "codeberg.org", "dev", "tool", "v2.1.0", "lib/utils.py")]
     [InlineData("git.example.com/company/app@release/2024:frontend/index.html", "git.example.com", "company", "app", "release/2024", "frontend/index.html")]
     [InlineData("source.internal.org/internal/project@hotfix/critical:scripts/deploy.sh", "source.internal.org", "internal", "project", "hotfix/critical", "scripts/deploy.sh")]
-    [InlineData("dev.azure.com/org/project@refs/heads/feature:azure-pipelines.yml", "dev.azure.com", "org", "project", "refs/heads/feature", "azure-pipelines.yml")]
+    [InlineData("dev.azure.com/org/project/repo@refs/heads/feature:azure-pipelines.yml", "dev.azure.com", "org", "repo", "refs/heads/feature", "azure-pipelines.yml")]
     [InlineData("git.sr.ht/user/repo@experimental:Makefile", "git.sr.ht", "user", "repo", "experimental", "Makefile")]
     public void TryParse_WithHostBranchAndPath_SetsAllProperties(string input, string expectedHost, string expectedOwner, string expectedRepo, string expectedBranch, string expectedPath)
     {

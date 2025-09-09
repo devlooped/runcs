@@ -15,7 +15,21 @@ public partial record RemoteRef(string Owner, string Repo, string? Ref, string? 
 
     public static bool TryParse(string value, [NotNullWhen(true)] out RemoteRef? remote)
     {
-        if (string.IsNullOrEmpty(value) || ParseExp().Match(value) is not { Success: true } match)
+        Match GetMatch(string input)
+        {
+            // Try Azure DevOps first since it is more specific
+            var match = ParseAzureDevOpsExp().Match(input);
+
+            if (match.Success)
+            {
+                return match;
+            }
+
+            return ParseExp().Match(input);
+        }
+
+        if (string.IsNullOrEmpty(value)
+            || GetMatch(value) is not { Success: true } match)
         {
             remote = null;
             return false;
@@ -28,10 +42,7 @@ public partial record RemoteRef(string Owner, string Repo, string? Ref, string? 
         var reference = match.Groups["ref"].Value;
         var filePath = match.Groups["path"].Value;
 
-        // If a third segment was provided, treat the originally parsed <repo> as the Azure DevOps project
-        if (!string.IsNullOrEmpty(project))
-            (project, repo) = (repo, project);
-        else
+        if (string.IsNullOrEmpty(project))
             project = null;
 
         // If project is provided, host is required, since GH does not support projects
@@ -57,4 +68,7 @@ public partial record RemoteRef(string Owner, string Repo, string? Ref, string? 
 
     [GeneratedRegex(@"^(?:(?<host>[A-Za-z0-9.-]+\.[A-Za-z]{2,})/)?(?<owner>[A-Za-z0-9](?:-?[A-Za-z0-9]){0,38})/(?<repo>[A-Za-z0-9._-]{1,100})(?:/(?<project>[A-Za-z0-9._-]{1,100}))?(?:@(?<ref>[^:\s]+))?(?::(?<path>.+))?$")]
     private static partial Regex ParseExp();
+
+    [GeneratedRegex(@"^(?:(?<host>dev.azure.com)/)(?<owner>[A-Za-z0-9](?:-?[A-Za-z0-9]){0,38})/(?<project>[%A-Za-z0-9._-]{1,100})(?:/(?<repo>[%A-Za-z0-9._-]{1,100}))?(?:@(?<ref>[^:\s]+))?(?::(?<path>.+))?$")]
+    private static partial Regex ParseAzureDevOpsExp();
 }

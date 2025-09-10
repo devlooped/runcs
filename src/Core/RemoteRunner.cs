@@ -7,7 +7,7 @@ namespace Devlooped;
 
 public class RemoteRunner(RemoteRef location, string toolName)
 {
-    public async Task<int> RunAsync(string[] args)
+    public async Task<int> RunAsync(string[] args, bool aot)
     {
         var config = Config.Build(Config.GlobalLocation);
         var etag = config.GetString(toolName, location.ToString(), "etag");
@@ -86,11 +86,15 @@ public class RemoteRunner(RemoteRef location, string toolName)
             Process.Start(DotnetMuxer.Path.FullName, ["clean", "-v:q", program]).WaitForExit();
         }
 
+        string[] runargs = aot
+            ? ["run", "-v:q", program, .. args]
+            : ["run", "-v:q", "-p:PublishAot=false", program, .. args];
+
 #if DEBUG
-        AnsiConsole.MarkupLine($":rocket: {DotnetMuxer.Path.FullName} run -v:q {program} {string.Join(' ', args)}");
+        AnsiConsole.MarkupLine($":rocket: {DotnetMuxer.Path.FullName} {string.Join(' ', runargs)}");
 #endif
 
-        var start = new ProcessStartInfo(DotnetMuxer.Path.FullName, ["run", "-v:q", program, .. args]);
+        var start = new ProcessStartInfo(DotnetMuxer.Path.FullName, runargs);
         var process = Process.Start(start);
         process?.WaitForExit();
 

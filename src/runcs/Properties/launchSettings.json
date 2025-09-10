@@ -2,7 +2,7 @@
   "profiles": {
     "args": {
       "commandName": "Project",
-      "commandLineArgs": "kzu/runcs@v0.1.0 dotnet rocks"
+      "commandLineArgs": "--aot kzu/runcs@v1 dotnet rocks"
     },
     "github": {
       "commandName": "Project",

@@ -7,12 +7,20 @@ using Spectre.Console;
 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
     Console.InputEncoding = Console.OutputEncoding = Encoding.UTF8;
 
+// Default PublishAot=false since it severely limits the code that can run (i.e. no reflection, STJ even)
+var aot = false;
+if (args.Any(x => x == "--aot"))
+{
+    aot = true;
+    args = [.. args.Where(x => x != "--aot")];
+}
+
 if (args.Length == 0 || !RemoteRef.TryParse(args[0], out var location))
 {
     AnsiConsole.MarkupLine(
         $"""
         Usage:
-            [grey][[dnx]][/] [lime]{ThisAssembly.Project.ToolCommandName}[/] [bold]<repoRef>[/] [grey italic][[<appArgs>...]][/]
+            [grey][[dnx]][/] [lime]{ThisAssembly.Project.ToolCommandName}[/] [grey][[--aot]][/] [bold]<repoRef>[/] [grey italic][[<appArgs>...]][/]
 
         Arguments:
             [bold]<REPO_REF>[/]  Reference to remote file to run, with format [yellow][[host/]]owner/repo[[@ref]][[:path]][/]
@@ -26,6 +34,9 @@ if (args.Length == 0 || !RemoteRef.TryParse(args[0], out var location))
                         * kzu/sandbox                         (implied host github.com, ref and path defaults)
                   
             [bold]<appArgs>[/]   Arguments passed to the C# program that is being run. 
+
+        Options:
+            [bold]--aot[/]       (optional) Enable dotnet AOT defaults for run file.cs. Defaults to false.
         """);
     return;
 }
@@ -40,7 +51,7 @@ Dispatcher.Initialize();
 // to process the dispatcher's job queue.
 var main = Task
     .Run(() => new RemoteRunner(location, ThisAssembly.Project.ToolCommandName)
-    .RunAsync(args[1..]))
+    .RunAsync(args[1..], aot))
     .ContinueWith(t =>
     {
         Dispatcher.MainThread.Shutdown();

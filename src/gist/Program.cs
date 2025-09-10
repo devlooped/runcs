@@ -7,12 +7,20 @@ using Spectre.Console;
 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
     Console.InputEncoding = Console.OutputEncoding = Encoding.UTF8;
 
+// Default PublishAot=false since it severely limits the code that can run (i.e. no reflection, STJ even)
+var aot = false;
+if (args.Any(x => x == "--aot"))
+{
+    aot = true;
+    args = [.. args.Where(x => x != "--aot")];
+}
+
 if (args.Length == 0 || !RemoteRef.TryParse("gist.github.com/" + args[0], out var location))
 {
     AnsiConsole.MarkupLine(
         $"""
         Usage:
-            [grey][[dnx]][/] [lime]{ThisAssembly.Project.ToolCommandName}[/] [bold]<gistRef>[/] [grey italic][[<appArgs>...]][/]
+            [grey][[dnx]][/] [lime]{ThisAssembly.Project.ToolCommandName}[/] [grey][[--aot]][/] [bold]<gistRef>[/] [grey italic][[<appArgs>...]][/]
 
         Arguments:
             [bold]<GIST_REF>[/]  Reference to gist file to run, with format [yellow]owner/gist[[@commit]][[:path]][/]
@@ -24,6 +32,9 @@ if (args.Length == 0 || !RemoteRef.TryParse("gist.github.com/" + args[0], out va
                         * kzu/0ac826dc7de666546aaedd38e5965381@d8079cf:run.cs  (explicit commit and file path)
                           
             [bold]<appArgs>[/]   Arguments passed to the C# program that is being run. 
+
+        Options:
+            [bold]--aot[/]       (optional) Enable dotnet AOT defaults for run file.cs. Defaults to false.
         """);
     return;
 }
@@ -38,7 +49,7 @@ Dispatcher.Initialize();
 // to process the dispatcher's job queue.
 var main = Task
     .Run(() => new RemoteRunner(location, ThisAssembly.Project.ToolCommandName)
-    .RunAsync(args[1..]))
+    .RunAsync(args[1..], aot))
     .ContinueWith(t =>
     {
         Dispatcher.MainThread.Shutdown();

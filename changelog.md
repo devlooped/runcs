@@ -1,5 +1,23 @@
 # Changelog
 
+## [v0.4.0](https://github.com/devlooped/runcs/tree/v0.4.0) (2025-09-24)
+
+[Full Changelog](https://github.com/devlooped/runcs/compare/v0.3.1...v0.4.0)
+
+:sparkles: Implemented enhancements:
+
+- Update to latest .NET 10 which receives the file without 'run' [\#17](https://github.com/devlooped/runcs/pull/17) (@kzu)
+- Default to non-AOT for runcs to broaden run-ability [\#15](https://github.com/devlooped/runcs/pull/15) (@kzu)
+
+:hammer: Other:
+
+- Azure DevOps projects and repos with spaces not supported [\#12](https://github.com/devlooped/runcs/issues/12)
+
+:twisted_rightwards_arrows: Merged:
+
+- Update to latest SLNX format [\#14](https://github.com/devlooped/runcs/pull/14) (@kzu)
+- Add support for Azure DevOps projects and repos with spaces [\#13](https://github.com/devlooped/runcs/pull/13) (@alexwiese)
+
 ## [v0.3.1](https://github.com/devlooped/runcs/tree/v0.3.1) (2025-08-30)
 
 [Full Changelog](https://github.com/devlooped/runcs/compare/v0.3.0...v0.3.1)

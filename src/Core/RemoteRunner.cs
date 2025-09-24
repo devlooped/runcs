@@ -87,8 +87,8 @@ public class RemoteRunner(RemoteRef location, string toolName)
         }
 
         string[] runargs = aot
-            ? ["run", "-v:q", program, .. args]
-            : ["run", "-v:q", "-p:PublishAot=false", program, .. args];
+            ? [program, "-v:q", .. args]
+            : [program, "-v:q", "-p:PublishAot=false", .. args];
 
 #if DEBUG
         AnsiConsole.MarkupLine($":rocket: {DotnetMuxer.Path.FullName} {string.Join(' ', runargs)}");

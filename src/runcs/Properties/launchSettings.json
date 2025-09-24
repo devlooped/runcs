@@ -19,6 +19,10 @@
     "bitbucket": {
       "commandName": "Project",
       "commandLineArgs": "bitbucket.org/kzu/runcs@dev:program.cs"
+    },
+    "vault2secrets": {
+      "commandName": "Project",
+      "commandLineArgs": "kzu/run:vault2secrets.cs"
     }
   }
 }

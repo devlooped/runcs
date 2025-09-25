@@ -1,5 +1,13 @@
 # Changelog
 
+## [v0.5.0](https://github.com/devlooped/runcs/tree/v0.5.0) (2025-09-25)
+
+[Full Changelog](https://github.com/devlooped/runcs/compare/v0.4.0...v0.5.0)
+
+:sparkles: Implemented enhancements:
+
+- Add support for creating aliases for refs [\#18](https://github.com/devlooped/runcs/pull/18) (@kzu)
+
 ## [v0.4.0](https://github.com/devlooped/runcs/tree/v0.4.0) (2025-09-24)
 
 [Full Changelog](https://github.com/devlooped/runcs/compare/v0.3.1...v0.4.0)

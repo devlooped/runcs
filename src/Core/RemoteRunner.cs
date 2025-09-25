@@ -5,11 +5,12 @@ using Spectre.Console;
 
 namespace Devlooped;
 
-public class RemoteRunner(RemoteRef location, string toolName)
+public class RemoteRunner(RemoteRef location, string toolName, Config? config = null)
 {
+    Config config = config ?? Config.Build(Config.GlobalLocation);
+
     public async Task<int> RunAsync(string[] args, bool aot)
     {
-        var config = Config.Build(Config.GlobalLocation);
         var etag = config.GetString(toolName, location.ToString(), "etag");
         if (etag != null && Directory.Exists(location.TempPath))
         {
@@ -18,6 +19,7 @@ public class RemoteRunner(RemoteRef location, string toolName)
 
             location = location with { ETag = etag };
         }
+
         if (config.TryGetString(toolName, location.ToString(), "uri", out var url) &&
             Uri.TryCreate(url, UriKind.Absolute, out var uri))
             location = location with { ResolvedUri = uri };

@@ -60,6 +60,10 @@ The last download etag is used to avoid downloading on each run.
 <!-- #runcs -->
 
 ## dnx gist
+
+[![Version](https://img.shields.io/nuget/vpre/gist.svg?color=royalblue)](https://www.nuget.org/packages/gist)
+[![Downloads](https://img.shields.io/nuget/dt/gist.svg?color=green)](https://www.nuget.org/packages/gist)
+
 <!-- #gist -->
 Run C# code programs from GitHub gists.
 

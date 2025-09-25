@@ -12,7 +12,7 @@
     <PackageReadmeFile>readme.md</PackageReadmeFile>
     <PackageTags>dotnet dotnet-tool</PackageTags>
 
-    <Description>Run gists directly using: dnx gist owner/gist[:path]</Description>
+    <Description>Run C# code gists directly using: dnx gist owner/gist[:path]</Description>
   </PropertyGroup>
 
   <ItemGroup>
@@ -21,6 +21,7 @@
     <PackageReference Include="Avalonia" Version="11.3.4" />
     <PackageReference Include="Avalonia.Desktop" Version="11.3.4" />
     <PackageReference Include="git-credential-manager" Version="2.6.1" IncludeAssets="tools" GeneratePathProperty="true" />
+    <PackageReference Include="System.CommandLine" Version="2.0.0-rc.1.25451.107" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(Pkggit-credential-manager)' != ''">

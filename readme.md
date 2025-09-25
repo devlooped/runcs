@@ -12,7 +12,7 @@ Run C# code programs from git repos on GitHub, GitLab and Azure DevOps.
 
 ```
 Usage:
-    [dnx] runcs <repoRef> [<appArgs>...]
+    [dnx] runcs [--aot] [--alias ALIAS] <repoRef> [<appArgs>...]
 
 Arguments:
     <REPO_REF>  Reference to remote file to run, with format [host/]owner/repo[@ref][:path]
@@ -25,7 +25,13 @@ Arguments:
                 * gitlab.com/kzu/sandbox@main:run.cs  (all explicit parts)
                 * kzu/sandbox                         (implied host github.com, ref and path defaults)
 
+                Can be an alias previously set with --alias.
+
     <appArgs>   Arguments passed to the C# program that is being run.
+
+Options:
+    --aot         (optional) Enable dotnet AOT defaults for run file.cs. Defaults to false.
+    --alias ALIAS (optional) Assign an alias on first usage which can be used instead of the full ref.
 ```
 
 Example:
@@ -50,16 +56,24 @@ The last download etag is used to avoid downloading on each run.
 Run C# code programs from GitHub gists.
 
 ```
-Usage: [dnx] gist <gistRef> [<appArgs>...]
+Usage: [dnx] gist [--aot] [--alias ALIAS] <gistRef> [<appArgs>...]
+
+Arguments:
     <GIST_REF>  Reference to gist file to run, with format owner/gist[@commit][:path]
-                @commit optional gist commit (default: default branch)
+                @commit optional gist commit (default: latest)
                 :path optional path to file in gist (default: program.cs or first .cs file)
 
                 Examples:
                 * kzu/0ac826dc7de666546aaedd38e5965381                 (tip commit and program.cs or first .cs file)
                 * kzu/0ac826dc7de666546aaedd38e5965381@d8079cf:run.cs  (explicit commit and file path)
 
-    <appArgs>   Arguments passed to the C# program gist that is being run.
+                Can be an alias previously set with --alias.
+
+    <appArgs>   Arguments passed to the C# program that is being run.
+
+Options:
+    --aot         (optional) Enable dotnet AOT defaults for run file.cs. Defaults to false.
+    --alias ALIAS (optional) Assign an alias on first usage which can be used instead of the full ref.
 ```
 
 > [!TIP]

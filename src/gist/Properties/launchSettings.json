@@ -1,5 +1,8 @@
 {
   "profiles": {
+    "help": {
+      "commandName": "Project",
+    },
     "gist": {
       "commandName": "Project",
       "commandLineArgs": "kzu/0ac826dc7de666546aaedd38e5965381"

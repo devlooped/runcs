@@ -1,6 +1,8 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.CommandLine;
+using System.Runtime.InteropServices;
 using System.Text;
 using Devlooped;
+using DotNetConfig;
 using GitCredentialManager.UI;
 using Spectre.Console;
 
@@ -15,12 +17,23 @@ if (args.Any(x => x == "--aot"))
     args = [.. args.Where(x => x != "--aot")];
 }
 
+var config = Config.Build(Config.GlobalLocation);
+if (args.Length > 0 && config.GetString("runcs", args[0]) is string aliased)
+    args = [aliased, .. args[1..]];
+
+// Set alias and remove from args if present
+var option = new Option<string?>("--alias");
+var parsed = new RootCommand() { Options = { option } }.Parse(args);
+var alias = parsed.GetValue(option);
+if (alias != null)
+    args = [.. parsed.UnmatchedTokens];
+
 if (args.Length == 0 || !RemoteRef.TryParse(args[0], out var location))
 {
     AnsiConsole.MarkupLine(
         $"""
         Usage:
-            [grey][[dnx]][/] [lime]{ThisAssembly.Project.ToolCommandName}[/] [grey][[--aot]][/] [bold]<repoRef>[/] [grey italic][[<appArgs>...]][/]
+            [grey][[dnx]][/] [lime]{ThisAssembly.Project.ToolCommandName}[/] [grey][[--aot]][/] [grey][[--alias ALIAS]][/] [bold]<repoRef>[/] [grey italic][[<appArgs>...]][/]
 
         Arguments:
             [bold]<REPO_REF>[/]  Reference to remote file to run, with format [yellow][[host/]]owner/repo[[@ref]][[:path]][/]
@@ -33,13 +46,19 @@ if (args.Length == 0 || !RemoteRef.TryParse(args[0], out var location))
                         * gitlab.com/kzu/sandbox@main:run.cs  (all explicit parts)
                         * kzu/sandbox                         (implied host github.com, ref and path defaults)
                   
+                        Can be an alias previously set with --alias.
+
             [bold]<appArgs>[/]   Arguments passed to the C# program that is being run. 
 
         Options:
-            [bold]--aot[/]       (optional) Enable dotnet AOT defaults for run file.cs. Defaults to false.
+            [bold]--aot[/]         (optional) Enable dotnet AOT defaults for run file.cs. Defaults to false.
+            [bold]--alias[/] ALIAS (optional) Assign an alias on first usage which can be used instead of the full ref.
         """);
     return;
 }
+
+if (alias != null)
+    config = config.SetString("runcs", alias, location.ToString());
 
 // Create the dispatcher on the main thread. This is required
 // for some platform UI services such as macOS that mandates
@@ -50,7 +69,7 @@ Dispatcher.Initialize();
 // Run AppMain in a new thread and keep the main thread free
 // to process the dispatcher's job queue.
 var main = Task
-    .Run(() => new RemoteRunner(location, ThisAssembly.Project.ToolCommandName)
+    .Run(() => new RemoteRunner(location, ThisAssembly.Project.ToolCommandName, config)
     .RunAsync(args[1..], aot))
     .ContinueWith(t =>
     {

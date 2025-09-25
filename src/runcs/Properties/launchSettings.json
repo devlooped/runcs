@@ -1,5 +1,8 @@
 {
   "profiles": {
+    "help": {
+      "commandName": "Project"
+    },
     "args": {
       "commandName": "Project",
       "commandLineArgs": "--aot kzu/runcs@v1 dotnet rocks"
@@ -23,6 +26,11 @@
     "vault2secrets": {
       "commandName": "Project",
       "commandLineArgs": "kzu/run:vault2secrets.cs"
+    },
+    "clean": {
+      "commandName": "Project",
+      "commandLineArgs": "clean",
+      "workingDirectory": "C:\\Code\\WhatsApp"
     }
   }
 }

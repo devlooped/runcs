@@ -33,7 +33,15 @@ Example:
 dnx gist kzu/52b115ce24c7978ddc33245d4ff840f5 dotnet rocks
 ```
 
-View [source gist](https://gist.github.com/kzu/52b115ce24c7978ddc33245d4ff840f5).
+View [source gist](https://gist.github.com/kzu/52b115ce24c7978ddc33245d4ff840f5):
+
+```csharp
+#:package Spectre.Console@*
+
+using Spectre.Console;
+
+AnsiConsole.MarkupLine($"Hello world from [green]dnx[/] [yellow]gist[/] :rocket: [bold italic]{string.Join(' ', args)}[/]");
+```
 
 When running different files from the same repo+ref, the download will be performed only once.
 The last download etag is used to avoid downloading on each run.

@@ -32,7 +32,15 @@ Example:
 dnx runcs kzu/runcs@v1:run.cs dotnet rocks
 ```
 
-View [source](https://github.com/kzu/runcs/blob/v1/run.cs).
+View [source](https://github.com/kzu/runcs/blob/v1/run.cs):
+
+```csharp
+#:package Spectre.Console@*
+
+using Spectre.Console;
+
+AnsiConsole.MarkupLine($"Hello world from [green]dnx[/] [yellow]gist[/] :rocket: [bold italic]{string.Join(' ', args)}[/]");
+```
 
 > [!TIP]
 > The repo does not need to be public. In that case, the same authentication 

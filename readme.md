@@ -52,7 +52,7 @@ AnsiConsole.MarkupLine($"Hello world from [green]dnx[/] [yellow]gist[/] :rocket:
 
 > [!TIP]
 > The repo does not need to be public. In that case, the same authentication 
-> used by your local `git` will be used to access the gist, via the Git Credential Manager.
+> used by your local `git` will be used to access the file, via the Git Credential Manager.
 
 When running different files from the same repo+ref, the download will be performed only once.
 The last download etag is used to avoid downloading on each run.

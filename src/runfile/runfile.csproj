@@ -31,7 +31,7 @@
     <PackageReference Include="DotNetConfig.Configuration" Version="1.2.0" />
     <PackageReference Include="Devlooped.CredentialManager" Version="2.7.0" Aliases="Devlooped" />
     <PackageReference Include="LibGit2Sharp" Version="0.31.0" />
-    <PackageReference Include="Spectre.Console" Version="0.55.2" />
+    <PackageReference Include="Spectre.Console" Version="0.57.2" />
     <PackageReference Include="ThisAssembly" Version="2.1.2" PrivateAssets="all" />
     <PackageReference Include="System.CommandLine" Version="2.0.9" />
     <PackageReference Include="Tmds.DBus.Protocol" Version="0.93.0" />
